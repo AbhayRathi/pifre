@@ -13,6 +13,7 @@ create table properties (
   lot_size_sqft integer,
   current_use text,
   year_built integer,
+  data_quality text check (data_quality in ('high', 'medium', 'low')) default 'low',
   raw_data jsonb,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
@@ -56,14 +57,41 @@ create table data_sources (
   id uuid primary key default uuid_generate_v4(),
   property_id text references properties(id) on delete cascade,
   adapter_name text not null,
-  confidence text check (confidence in ('real', 'partial', 'fallback')),
+  confidence text check (confidence in ('high', 'medium', 'low')),
   fetched_at timestamptz,
   raw_response jsonb,
   created_at timestamptz default now()
 );
 
--- Enable Row Level Security (configure policies when auth is added)
+-- Enable Row Level Security
 alter table properties enable row level security;
 alter table scenarios enable row level security;
 alter table risks enable row level security;
 alter table data_sources enable row level security;
+
+-- Allow anonymous reads on properties (public data, no PII)
+create policy "Public read access" on properties
+  for select using (true);
+
+create policy "Public read access" on scenarios
+  for select using (true);
+
+create policy "Public read access" on risks
+  for select using (true);
+
+create policy "Public read access" on data_sources
+  for select using (true);
+
+-- Write policies restricted to service_role
+create policy "Service role write" on properties
+  for all using (auth.role() = 'service_role');
+
+create policy "Service role write" on scenarios
+  for all using (auth.role() = 'service_role');
+
+create policy "Service role write" on risks
+  for all using (auth.role() = 'service_role');
+
+create policy "Service role write" on data_sources
+  for all using (auth.role() = 'service_role');
+

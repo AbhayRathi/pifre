@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { sourceRecordSchema } from "./source";
 
-export const dataQualitySchema = z.enum(["real", "partial", "fallback"]);
+export const dataQualitySchema = z.enum(["high", "medium", "low"]);
 
 export const propertyRecordSchema = z.object({
   id: z.string(),
@@ -18,8 +18,9 @@ export const propertyRecordSchema = z.object({
   zoning: z.string().optional(),
   yearBuilt: z.number().optional(),
   sourceRecords: z.array(sourceRecordSchema),
-  dataQuality: dataQualitySchema,
+  dataQuality: dataQualitySchema.default("low"),
 });
 
 export type DataQuality = z.infer<typeof dataQualitySchema>;
 export type PropertyRecord = z.infer<typeof propertyRecordSchema>;
+

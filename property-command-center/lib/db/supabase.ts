@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { env } from "@/lib/env";
 
 export type Database = {
   public: {
@@ -15,6 +16,7 @@ export type Database = {
           lot_size_sqft: number | null;
           current_use: string | null;
           year_built: number | null;
+          data_quality: string | null;
           raw_data: unknown | null;
           created_at: string;
           updated_at: string;
@@ -73,29 +75,18 @@ export type Database = {
 };
 
 export function createServerClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const url = env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = env.SUPABASE_SERVICE_ROLE_KEY ?? env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!url || !key) {
     throw new Error(
-      "Missing Supabase environment variables. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env"
+      "[Supabase] Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY. " +
+        "Add them to .env.local — see .env.example for reference."
     );
   }
 
   return createClient<Database>(url, key, {
-    auth: { persistSession: false },
+    auth: { persistSession: false, autoRefreshToken: false },
   });
 }
 
-export function createBrowserClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!url || !anonKey) {
-    throw new Error(
-      "Missing Supabase environment variables. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env"
-    );
-  }
-
-  return createClient<Database>(url, anonKey);
-}

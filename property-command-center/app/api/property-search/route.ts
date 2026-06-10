@@ -1,35 +1,27 @@
+import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
-import { getAllMockProperties } from "@/lib/data/mock-properties";
+import { searchProperties } from "@/lib/db/properties";
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const raw = searchParams.get("q") ?? "";
-  const query = raw
+const querySchema = z.object({
+  q: z
+    .string()
     .trim()
-    .toLowerCase()
-    .slice(0, 200)
-    .replace(/[<>"'`;]/g, "");
-  if (!query) return NextResponse.json({ results: [] });
+    .min(1, "Query must not be empty")
+    .max(200)
+    .transform((s) => s.toLowerCase().replace(/[<>"'`;]/g, "")),
+});
 
-  const properties = getAllMockProperties();
+export async function GET(req: NextRequest) {
+  const raw = req.nextUrl.searchParams.get("q") ?? "";
+  const parsed = querySchema.safeParse({ q: raw });
+  if (!parsed.success) return NextResponse.json({ results: [] });
 
-  const filtered = properties.filter(
-    (p) =>
-      p.property.address.toLowerCase().includes(query) ||
-      p.property.city.toLowerCase().includes(query) ||
-      p.property.currentUse?.toLowerCase().includes(query) ||
-      p.property.zoning?.toLowerCase().includes(query)
-  );
-
-  return NextResponse.json({
-    results: filtered.map((p) => ({
-      id: p.property.id,
-      address: p.property.address,
-      city: p.property.city,
-      state: p.property.state,
-      currentUse: p.property.currentUse,
-      zoning: p.property.zoning,
-    })),
-    query,
-  });
+  try {
+    const results = await searchProperties(parsed.data.q);
+    return NextResponse.json({ results });
+  } catch (err) {
+    console.error("[/api/property-search]", err);
+    return NextResponse.json({ error: "Search unavailable" }, { status: 503 });
+  }
 }
+

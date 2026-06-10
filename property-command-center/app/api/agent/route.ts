@@ -1,26 +1,36 @@
-import { NextRequest } from "next/server";
+import { z } from "zod";
+import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "edge";
+const agentSchema = z.object({
+  propertyId: z.string().min(1).max(100),
+  question: z.string().trim().min(1).max(1000),
+  context: z.record(z.unknown()).optional(),
+});
 
 export async function POST(req: NextRequest) {
-  const { propertyId, question } = (await req.json()) as {
-    propertyId: string;
-    question: string;
-    context?: unknown;
-  };
-
-  if (!process.env.OPENAI_API_KEY && !process.env.ANTHROPIC_API_KEY) {
-    return new Response(
-      JSON.stringify({
-        answer: `[AI agent not yet configured] Your question about property ${propertyId}: "${question}" — To enable real AI responses, add OPENAI_API_KEY or ANTHROPIC_API_KEY to your environment.`,
-        sources: [],
-        confidence: "fallback",
-      }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
-    );
+  const body: unknown = await req.json().catch(() => ({}));
+  const parsed = agentSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  // TODO: wire to OpenAI or Anthropic streaming response
-  // TODO: inject property context (scenarios, risks, zoning data) as RAG context
-  return new Response("Not yet implemented", { status: 501 });
+  const { propertyId, question } = parsed.data;
+
+  if (!process.env.OPENAI_API_KEY && !process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json({
+      answer:
+        `[AI assistant not configured] Question received: "${question}". ` +
+        `To activate AI-powered analysis for property ${propertyId}, ` +
+        `add OPENAI_API_KEY or ANTHROPIC_API_KEY to your environment variables. ` +
+        `Until then, all scenario, risk, and financial analysis is available in the ` +
+        `Scenarios, Risk Register, and Report tabs above.`,
+      sources: [],
+      confidence: "low" as const,
+      isPlaceholder: true,
+    });
+  }
+
+  // TODO: wire real AI streaming response here
+  return NextResponse.json({ error: "Not yet implemented" }, { status: 501 });
 }
+
