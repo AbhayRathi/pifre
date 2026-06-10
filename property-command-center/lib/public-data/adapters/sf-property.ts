@@ -1,5 +1,6 @@
 import { DataAdapter, AdapterResult } from "../types";
 import { SourceRecord } from "../../schemas/source";
+import { makeSourceId } from "../adapter-utils";
 
 /**
  * San Francisco Property Data Adapter
@@ -38,7 +39,7 @@ export const sfPropertyAdapter: DataAdapter = {
         const data = await response.json();
 
         sources.push({
-          id: `sf-assessor-${Date.now()}`,
+          id: makeSourceId("sf-assessor", address),
           sourceName: "SF Assessor - Secured Property Tax Rolls",
           sourceType: "assessor",
           title: `Property assessment data for ${address}`,
@@ -72,7 +73,7 @@ export const sfPropertyAdapter: DataAdapter = {
 
       // If we get here, the request succeeded but no data was found
       sources.push({
-        id: `sf-assessor-empty-${Date.now()}`,
+        id: makeSourceId("sf-assessor-no-match", address),
         sourceName: "SF Assessor - Secured Property Tax Rolls",
         sourceType: "assessor",
         title: `No records found for ${address}`,
@@ -87,7 +88,7 @@ export const sfPropertyAdapter: DataAdapter = {
     } catch (error) {
       // Network error or timeout - graceful fallback
       sources.push({
-        id: `sf-assessor-error-${Date.now()}`,
+        id: makeSourceId("sf-assessor-error", address),
         sourceName: "SF Assessor - Secured Property Tax Rolls",
         sourceType: "assessor",
         title: `Failed to retrieve data for ${address}`,

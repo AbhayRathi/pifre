@@ -1,5 +1,6 @@
 import { DataAdapter, AdapterResult } from "../types";
 import { SourceRecord } from "../../schemas/source";
+import { makeSourceId } from "../adapter-utils";
 
 /**
  * San Jose GIS / Open Data Adapter
@@ -44,7 +45,7 @@ export const sanJoseGisAdapter: DataAdapter = {
           (data as { results: unknown[] }).results.length > 0;
 
         sources.push({
-          id: `sj-gis-${Date.now()}`,
+          id: makeSourceId("sj-gis", address),
           sourceName: "San Jose GIS Open Data Portal",
           sourceType: "gis",
           title: `GIS data search for ${address}`,
@@ -68,7 +69,7 @@ export const sanJoseGisAdapter: DataAdapter = {
       }
 
       sources.push({
-        id: `sj-gis-fail-${Date.now()}`,
+        id: makeSourceId("sj-gis-no-match", address),
         sourceName: "San Jose GIS Open Data Portal",
         sourceType: "gis",
         title: `No GIS data found for ${address}`,
@@ -81,7 +82,7 @@ export const sanJoseGisAdapter: DataAdapter = {
       return { success: false, sources };
     } catch (error) {
       sources.push({
-        id: `sj-gis-error-${Date.now()}`,
+        id: makeSourceId("sj-gis-error", address),
         sourceName: "San Jose GIS Open Data Portal",
         sourceType: "gis",
         title: `Failed to query GIS data for ${address}`,

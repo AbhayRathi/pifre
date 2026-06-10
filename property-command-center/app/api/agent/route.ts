@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 const agentSchema = z.object({
   propertyId: z.string().min(1).max(100),
   question: z.string().trim().min(1).max(1000),
-  context: z.record(z.unknown()).optional(),
+  context: z.record(z.string(), z.unknown()).optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -30,7 +30,12 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  // TODO: wire real AI streaming response here
-  return NextResponse.json({ error: "Not yet implemented" }, { status: 501 });
+  // AI key present but streaming not yet implemented — return labelled placeholder
+  return NextResponse.json({
+    answer: `AI provider is configured. Streaming analysis for property ${propertyId} is in active development. Question received: "${question}"`,
+    sources: [],
+    confidence: "low" as const,
+    isPlaceholder: true,
+  });
 }
 

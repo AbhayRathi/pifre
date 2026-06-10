@@ -1,5 +1,18 @@
 import { createServerClient } from "./supabase";
 import { propertyRecordSchema, type PropertyRecord } from "@/lib/schemas/property";
+import type { Scenario } from "@/lib/schemas/scenario";
+import type { Risk } from "@/lib/schemas/risk";
+
+/**
+ * The shape expected by PropertyWorkspace.
+ * Mirrors MockProperty but is sourced from the database.
+ */
+export interface PropertyWorkspaceData {
+  property: PropertyRecord;
+  scenarios: Scenario[];
+  risks: Risk[];
+  assumptions: Record<string, number | string>;
+}
 
 /**
  * Returns true when Supabase is configured.
@@ -104,7 +117,7 @@ export async function getAllPropertyIds(): Promise<string[]> {
   const db = createServerClient();
   const { data, error } = await db.from("properties").select("id");
   if (error) throw new Error(`[DB] getAllPropertyIds: ${error.message}`);
-  return (data ?? []).map((r) => r.id);
+  return (data as Array<{ id: string }> ?? []).map((r) => r.id);
 }
 
 export async function getPropertyById(id: string): Promise<PropertyRecord | null> {
@@ -132,5 +145,114 @@ export async function searchProperties(query: string): Promise<PropertyRecord[]>
     .limit(20);
   if (error) throw new Error(`[DB] searchProperties: ${error.message}`);
   return (data ?? []).map(mapRowToPropertyRecord);
+}
+
+export async function getAllProperties(): Promise<PropertyRecord[]> {
+  if (!isSupabaseConfigured()) return [];
+  const db = createServerClient();
+  const { data, error } = await db
+    .from("properties")
+    .select("*, data_sources(*)")
+    .order("address");
+  if (error) throw new Error(`[DB] getAllProperties: ${error.message}`);
+  return (data ?? []).map(mapRowToPropertyRecord);
+}
+
+function mapDbScenarioRow(row: DbScenarioRow): Scenario {
+  const feasibility = row.feasibility ?? "low";
+  const riskLevel =
+    feasibility === "high" || feasibility === "medium" || feasibility === "low"
+      ? (feasibility as "high" | "medium" | "low")
+      : "low";
+
+  return {
+    id: row.id,
+    name: row.title,
+    type: "conservative" as const,
+    description: row.description ?? "",
+    estimatedUnits: { min: 0, max: 0 },
+    estimatedCost: {
+      min: row.cost_low ?? 0,
+      max: row.cost_high ?? 0,
+    },
+    estimatedValue: {
+      min: row.revenue_low ?? 0,
+      max: row.revenue_high ?? 0,
+    },
+    timeline:
+      row.timeline_months_min != null
+        ? `${row.timeline_months_min}–${row.timeline_months_max ?? row.timeline_months_min} months`
+        : "TBD",
+    riskLevel,
+    confidence: "low" as const,
+    recommendation: "",
+    massingConfig: {
+      mainBuilding: { width: 40, depth: 30, height: 20, color: "#b87333" },
+    },
+  };
+}
+
+function mapDbRiskRow(row: DbRiskRow): Risk {
+  const severity = ["low", "medium", "high", "critical"].includes(row.severity ?? "")
+    ? (row.severity as "low" | "medium" | "high" | "critical")
+    : "low";
+  const likelihood = ["unlikely", "possible", "likely", "very_likely"].includes(
+    row.likelihood ?? ""
+  )
+    ? (row.likelihood as "unlikely" | "possible" | "likely" | "very_likely")
+    : "unlikely";
+  const riskCategoryValues = [
+    "zoning",
+    "permitting",
+    "construction",
+    "financing",
+    "market",
+    "environmental",
+    "data_confidence",
+    "community_political",
+    "legal_professional",
+  ];
+  const category = riskCategoryValues.includes(row.category)
+    ? (row.category as Risk["category"])
+    : "data_confidence";
+
+  return {
+    id: row.id,
+    category,
+    severity,
+    likelihood,
+    summary: row.title,
+    mitigation: row.mitigation ?? "",
+    verifiedBy: row.verification_owner ?? "Unassigned",
+  };
+}
+
+export async function getPropertyWithScenariosAndRisks(
+  id: string
+): Promise<PropertyWorkspaceData | null> {
+  if (!isSupabaseConfigured()) return null;
+
+  const db = createServerClient();
+
+  const [propResult, scenariosResult, risksResult] = await Promise.all([
+    db
+      .from("properties")
+      .select("*, data_sources(*)")
+      .eq("id", id)
+      .single(),
+    db.from("scenarios").select("*").eq("property_id", id),
+    db.from("risks").select("*").eq("property_id", id),
+  ]);
+
+  if (propResult.error) {
+    if (propResult.error.code === "PGRST116") return null;
+    throw new Error(`[DB] getPropertyWithScenariosAndRisks(${id}): ${propResult.error.message}`);
+  }
+
+  const property = mapRowToPropertyRecord(propResult.data);
+  const scenarios = (scenariosResult.data ?? []).map((r) => mapDbScenarioRow(r as DbScenarioRow));
+  const risks = (risksResult.data ?? []).map((r) => mapDbRiskRow(r as DbRiskRow));
+
+  return { property, scenarios, risks, assumptions: {} };
 }
 

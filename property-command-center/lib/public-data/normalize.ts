@@ -33,6 +33,17 @@ export async function normalizeAdapterResults(
     allSources.push(...result.sources);
   }
 
+  const seen = new Set<string>();
+  const uniqueSources = allSources.filter((s) => {
+    if (seen.has(s.id)) return false;
+    seen.add(s.id);
+    return true;
+  });
+  const confidenceOrder = { high: 0, medium: 1, low: 2 };
+  uniqueSources.sort(
+    (a, b) => (confidenceOrder[a.confidence] ?? 2) - (confidenceOrder[b.confidence] ?? 2)
+  );
+
   const dataQuality = hasRealData ? "real" : hasPartialData ? "partial" : "fallback";
   const id = await generatePropertyId(baseAddress, city);
 
@@ -50,7 +61,7 @@ export async function normalizeAdapterResults(
     currentUse: merged.currentUse,
     zoning: merged.zoning,
     yearBuilt: merged.yearBuilt,
-    sourceRecords: allSources,
+    sourceRecords: uniqueSources,
     dataQuality,
   };
 }

@@ -1,7 +1,14 @@
 import { notFound } from "next/navigation";
-import { getMockPropertyById } from "@/lib/data/mock-properties";
+import { getPropertyWithScenariosAndRisks, getAllPropertyIds } from "@/lib/db/properties";
 import { PropertyWorkspace } from "@/components/property/property-workspace";
 import { ErrorBoundary } from "@/components/error-boundary";
+
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  const ids = await getAllPropertyIds();
+  return ids.map((id) => ({ id }));
+}
 
 interface PropertyPageProps {
   params: Promise<{ id: string }>;
@@ -9,23 +16,15 @@ interface PropertyPageProps {
 
 export default async function PropertyPage({ params }: PropertyPageProps) {
   const { id } = await params;
-  const propertyData = getMockPropertyById(id);
+  const data = await getPropertyWithScenariosAndRisks(id);
 
-  if (!propertyData) {
+  if (!data) {
     notFound();
   }
 
   return (
     <ErrorBoundary>
-      <PropertyWorkspace data={propertyData} />
+      <PropertyWorkspace data={data} />
     </ErrorBoundary>
   );
-}
-
-export function generateStaticParams() {
-  return [
-    { id: "oakland-adu-expansion" },
-    { id: "san-jose-vacant-lot" },
-    { id: "sf-adaptive-reuse" },
-  ];
 }

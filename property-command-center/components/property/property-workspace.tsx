@@ -11,11 +11,11 @@ import { RiskRegister } from "./risk-register";
 import { AgentPanel } from "./agent-panel";
 import { ReportPreview } from "./report-preview";
 import { SourceList } from "./source-list";
-import { MockProperty } from "@/lib/data/mock-properties";
+import { PropertyWorkspaceData } from "@/lib/db/properties";
 import { buildReport } from "@/lib/reports/build-report";
 
 interface PropertyWorkspaceProps {
-  data: MockProperty;
+  data: PropertyWorkspaceData;
 }
 
 export function PropertyWorkspace({ data }: PropertyWorkspaceProps) {

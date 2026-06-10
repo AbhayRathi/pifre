@@ -1,5 +1,6 @@
 import { DataAdapter, AdapterResult } from "../types";
 import { SourceRecord } from "../../schemas/source";
+import { makeSourceId } from "../adapter-utils";
 
 /**
  * Alameda County Open Data Adapter
@@ -35,7 +36,7 @@ export const alamedaCountyAdapter: DataAdapter = {
 
       if (response.ok) {
         sources.push({
-          id: `alameda-parcel-${Date.now()}`,
+          id: makeSourceId("alameda-parcel", address),
           sourceName: "Alameda County Open Data",
           sourceType: "parcel",
           title: `Parcel data search for ${address}, ${city}`,
@@ -58,7 +59,7 @@ export const alamedaCountyAdapter: DataAdapter = {
       }
 
       sources.push({
-        id: `alameda-fail-${Date.now()}`,
+        id: makeSourceId("alameda-no-match", address),
         sourceName: "Alameda County Open Data",
         sourceType: "parcel",
         title: `No parcel data found for ${address}`,
@@ -71,7 +72,7 @@ export const alamedaCountyAdapter: DataAdapter = {
       return { success: false, sources };
     } catch (error) {
       sources.push({
-        id: `alameda-error-${Date.now()}`,
+        id: makeSourceId("alameda-error", address),
         sourceName: "Alameda County Open Data",
         sourceType: "parcel",
         title: `Failed to retrieve data for ${address}`,

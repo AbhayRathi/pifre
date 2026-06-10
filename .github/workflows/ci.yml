@@ -32,16 +32,18 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Lint
-        run: npx next lint --max-warnings 0
+        run: npm run lint
 
       - name: Format check
-        run: npx prettier --check .
+        run: npm run format:check
 
       - name: Unit tests
         run: npm run test:run
 
       - name: Build
         run: npm run build
+        env:
+          SKIP_ENV_VALIDATION: "true"
 
   e2e:
     name: E2E (Playwright)

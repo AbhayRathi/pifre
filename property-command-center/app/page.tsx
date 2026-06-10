@@ -3,29 +3,27 @@ import { Card, CardContent } from "@/components/ui/card";
 import { MetricCard } from "@/components/dashboard/metric-card";
 import { PropertyCard } from "@/components/dashboard/property-card";
 import { PropertySearchInput } from "@/components/property-search-input";
-import { getAllMockProperties } from "@/lib/data/mock-properties";
+import { getAllProperties } from "@/lib/db/properties";
 
-export default function DashboardPage() {
-  const properties = getAllMockProperties();
+export default async function DashboardPage() {
+  const properties = await getAllProperties();
 
   const propertyIds = properties.map((p) => ({
-    id: p.property.id,
-    address: p.property.address,
-    city: p.property.city,
+    id: p.id,
+    address: p.address,
+    city: p.city,
   }));
 
-  const totalScenarios = properties.reduce((sum, p) => sum + p.scenarios.length, 0);
-  const totalSources = properties.reduce((sum, p) => sum + p.property.sourceRecords.length, 0);
-  const realSources = properties.reduce(
-    (sum, p) => sum + p.property.sourceRecords.filter((s) => s.confidence === "high").length,
+  const totalSources = properties.reduce((sum, p) => sum + p.sourceRecords.length, 0);
+  const highConfSources = properties.reduce(
+    (sum, p) => sum + p.sourceRecords.filter((s) => s.confidence === "high").length,
     0
   );
   const confidenceLabel =
-    realSources > totalSources / 2 ? "High" : realSources > 0 ? "Medium" : "Fallback";
+    highConfSources > totalSources / 2 ? "High" : highConfSources > 0 ? "Medium" : "Low";
 
   return (
     <div className="max-w-[1400px] mx-auto px-6 py-10">
-      {/* Hero Section */}
       <div className="text-center mb-12 space-y-4">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-copper-600/10 border border-copper-600/20 text-copper-300 text-xs mb-4">
           <span className="w-1.5 h-1.5 rounded-full bg-copper-400 animate-pulse" />
@@ -36,91 +34,41 @@ export default function DashboardPage() {
         </h1>
         <p className="text-lg text-ivory-400 max-w-2xl mx-auto">
           Should you buy, build, convert, redesign, negotiate, or walk away?
-          <br />
-          <span className="text-ivory-500">Intelligence for property decisions.</span>
         </p>
-
-        {/* Search Bar */}
         <PropertySearchInput propertyIds={propertyIds} />
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-        <MetricCard
-          title="Properties Analyzed"
-          value={properties.length}
-          subtitle="Bay Area properties"
-          icon={
-            <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-              <path d="M2 14V6L8 2L14 6V14H10V10H6V14H2Z" fill="currentColor" />
-            </svg>
-          }
-        />
-        <MetricCard
-          title="Scenarios Generated"
-          value={totalScenarios}
-          subtitle="Development options"
-          icon={
-            <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-              <rect x="2" y="2" width="5" height="5" rx="1" fill="currentColor" />
-              <rect x="9" y="2" width="5" height="5" rx="1" fill="currentColor" opacity="0.7" />
-              <rect x="2" y="9" width="5" height="5" rx="1" fill="currentColor" opacity="0.5" />
-              <rect x="9" y="9" width="5" height="5" rx="1" fill="currentColor" opacity="0.3" />
-            </svg>
-          }
-        />
-        <MetricCard
-          title="Average Confidence"
-          value={confidenceLabel}
-          subtitle={`${realSources} of ${totalSources} sources verified`}
-          trend="neutral"
-          icon={
-            <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-              <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="2" />
-              <path d="M8 5V8L10 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          }
-        />
-        <MetricCard
-          title="Potential Units"
-          value={properties.reduce(
-            (sum, p) => sum + Math.max(...p.scenarios.map((s) => s.estimatedUnits.max)),
-            0
-          )}
-          subtitle="Across all scenarios"
-          trend="up"
-          icon={
-            <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-              <path d="M3 13L3 7L8 3L13 7L13 13" stroke="currentColor" strokeWidth="2" />
-              <rect x="6" y="9" width="4" height="4" fill="currentColor" />
-            </svg>
-          }
-        />
-      </div>
-
-      {/* Properties */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-ivory-200">Recent Properties</h2>
-          <span className="text-xs text-ivory-500">{properties.length} properties</span>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {properties.map((p) => (
-            <PropertyCard key={p.property.id} property={p} />
-          ))}
-        </div>
-      </div>
-
-      {/* CTA */}
-      <Card className="mt-10 bg-gradient-to-r from-copper-600/5 to-copper-700/5 border-copper-600/20">
-        <CardContent className="p-8 text-center space-y-3">
-          <h3 className="text-lg font-semibold text-ivory-100">Ready to analyze a property?</h3>
-          <p className="text-sm text-ivory-400 max-w-lg mx-auto">
-            Enter any Bay Area address above to generate a comprehensive Property Opportunity Brief
-            with scenarios, risks, and recommendations.
-          </p>
-        </CardContent>
-      </Card>
+      {properties.length === 0 ? (
+        <Card className="border-copper-600/30 bg-copper-600/5">
+          <CardContent className="p-10 text-center space-y-4">
+            <div className="text-4xl">🏗️</div>
+            <h2 className="text-xl font-semibold text-ivory-100">Database not yet connected</h2>
+            <p className="text-sm text-ivory-400 max-w-lg mx-auto">
+              Connect your Supabase project and run the seed data to get started.
+            </p>
+            <div className="text-left inline-block bg-graphite-800 rounded-lg px-6 py-4 text-xs text-ivory-300 font-mono space-y-1">
+              <p className="text-ivory-500"># 1. Copy and fill your environment variables</p>
+              <p>cp .env.example .env.local</p>
+              <p className="text-ivory-500 mt-2"># 2. Run schema and seed in Supabase SQL editor</p>
+              <p>supabase/schema.sql → supabase/seed.sql</p>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+            <MetricCard title="Properties" value={properties.length} subtitle="In database" />
+            <MetricCard title="Data Sources" value={totalSources} subtitle="Across all properties" />
+            <MetricCard title="Avg Confidence" value={confidenceLabel} subtitle={`${highConfSources} verified`} />
+            <MetricCard title="Cities" value={new Set(properties.map((p) => p.city)).size} subtitle="Markets covered" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {properties.map((p) => (
+              <PropertyCard key={p.id} property={p} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

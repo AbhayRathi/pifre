@@ -1,5 +1,6 @@
 import { DataAdapter, AdapterResult } from "../types";
 import { SourceRecord } from "../../schemas/source";
+import { makeSourceId } from "../adapter-utils";
 
 /**
  * California State Geoportal Adapter
@@ -35,7 +36,7 @@ export const californiaGeoportalAdapter: DataAdapter = {
 
       if (response.ok) {
         sources.push({
-          id: `ca-geoportal-${Date.now()}`,
+          id: makeSourceId("ca-geoportal", address),
           sourceName: "California State Geoportal",
           sourceType: "gis",
           title: `State-level GIS search for ${address}, ${city}`,
@@ -56,7 +57,7 @@ export const californiaGeoportalAdapter: DataAdapter = {
       }
 
       sources.push({
-        id: `ca-geoportal-fail-${Date.now()}`,
+        id: makeSourceId("ca-geoportal-no-match", address),
         sourceName: "California State Geoportal",
         sourceType: "gis",
         title: `No state-level data found for ${address}`,
@@ -69,7 +70,7 @@ export const californiaGeoportalAdapter: DataAdapter = {
       return { success: false, sources };
     } catch (error) {
       sources.push({
-        id: `ca-geoportal-error-${Date.now()}`,
+        id: makeSourceId("ca-geoportal-error", address),
         sourceName: "California State Geoportal",
         sourceType: "gis",
         title: `Failed to query state data for ${address}`,

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { sourceRecordSchema } from "./source";
 
-export const dataQualitySchema = z.enum(["high", "medium", "low"]);
+export const dataQualitySchema = z.enum(["high", "medium", "low", "real", "partial", "fallback"]);
 
 export const propertyRecordSchema = z.object({
   id: z.string(),
