@@ -51,7 +51,7 @@ export function buildReport(
     {
       id: "cost-revenue",
       title: "Cost / Revenue Snapshot",
-      content: `Acquisition: ${formatCurrency(Number(assumptions.acquisitionPrice) || 0)}\nHard Cost: ${formatCurrency(Number(assumptions.hardCostPerSqFt) || 0)}/sq ft\nSoft Costs: ${assumptions.softCostPercentage || 0}% of hard costs\nContingency: ${assumptions.contingencyPercentage || 0}%\nTarget Rent: ${formatCurrency(Number(assumptions.targetRent) || 0)}/month\nTarget Sale Value: ${formatCurrency(Number(assumptions.targetSaleValue) || 0)}/unit\n\nAll figures are estimates based on assumptions and require verification.`,
+      content: `| Assumption | Value |\n|---|---|\n| Acquisition Price | ${formatCurrency(Number(assumptions.acquisitionPrice) || 0)} |\n| Lot Size | ${Number(assumptions.lotSize || 0).toLocaleString()} sq ft |\n| Building Size | ${Number(assumptions.buildingSize || 0).toLocaleString()} sq ft |\n| Target Units | ${assumptions.targetUnits || 0} |\n| Hard Cost / SF | ${formatCurrency(Number(assumptions.hardCostPerSqFt) || 0)} |\n| Soft Costs | ${assumptions.softCostPercentage || 0}% of hard costs |\n| Contingency | ${assumptions.contingencyPercentage || 0}% |\n| Target Rent | ${formatCurrency(Number(assumptions.targetRent) || 0)}/month |\n| Target Sale Value | ${formatCurrency(Number(assumptions.targetSaleValue) || 0)}/unit |\n| Financing | ${assumptions.financingNotes || "TBD"} |\n\nAll figures are estimates based on assumptions and require independent verification by qualified professionals.`,
       order: 6,
     },
     {
@@ -92,7 +92,7 @@ export function buildReport(
     {
       id: "disclaimer",
       title: "Disclaimer",
-      content: REPORT_DISCLAIMER,
+      content: `Data Confidence Level: ${property.dataQuality.toUpperCase()}\n\n${property.dataQuality === "fallback" ? "⚠️ This report uses FALLBACK data that has not been verified against live public records. All information must be independently confirmed before making any acquisition, design, or investment decision.\n\n" : property.dataQuality === "partial" ? "⚠️ This report uses PARTIAL data — some fields were retrieved from public sources but may be incomplete.\n\n" : ""}${REPORT_DISCLAIMER}`,
       order: 12,
     },
   ];

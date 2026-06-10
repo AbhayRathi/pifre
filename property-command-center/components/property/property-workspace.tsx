@@ -110,7 +110,7 @@ export function PropertyWorkspace({ data }: PropertyWorkspaceProps) {
 
       {/* Right Intelligence Panel */}
       <div className="w-80 border-l border-graphite-700/50 bg-graphite-800/20 p-4 flex flex-col gap-4 overflow-y-auto">
-        <AgentPanel propertyAddress={property.address} />
+        <AgentPanel propertyAddress={property.address} propertyId={property.id} propertyContext={{ scenarios, risks }} />
         <AssumptionsPanel
           assumptions={localAssumptions}
           onUpdate={handleAssumptionUpdate}

@@ -17,7 +17,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
 
   return (
     <Link href={`/properties/${prop.id}`}>
-      <Card className="hover:border-copper-600/50 hover:shadow-copper-600/5 hover:shadow-xl transition-all duration-300 cursor-pointer group">
+      <Card data-testid="property-card" className="hover:border-copper-600/50 hover:shadow-copper-600/5 hover:shadow-xl transition-all duration-300 cursor-pointer group">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div>

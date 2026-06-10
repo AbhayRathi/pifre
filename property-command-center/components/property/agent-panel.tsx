@@ -4,9 +4,12 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 
 interface AgentPanelProps {
   propertyAddress: string;
+  propertyId?: string;
+  propertyContext?: unknown;
 }
 
 const suggestedPrompts = [
@@ -33,26 +36,48 @@ const cannedResponses: Record<string, string> = {
     "Adding one ADU (accessory dwelling unit) under California AB 68/SB 13: Typical 600-1000sf detached unit in rear yard. Cost estimate: $200-350K depending on finishes and site conditions. Monthly rent potential: $2,000-3,200 in this market. Timeline: 4-8 months (streamlined permitting — no discretionary review required). ROI is strong for cashflow strategy. This can be done simultaneously with main structure improvements and doesn't require any zoning variance.",
 };
 
-export function AgentPanel({ propertyAddress }: AgentPanelProps) {
-  const [messages, setMessages] = useState<Array<{ role: "user" | "agent"; content: string }>>([]);
+export function AgentPanel({ propertyAddress, propertyId, propertyContext }: AgentPanelProps) {
+  const [messages, setMessages] = useState<Array<{ role: "user" | "agent"; content: string; confidence?: string }>>([]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSend = (prompt: string) => {
+  const handleSend = async (prompt: string) => {
     const userMessage = prompt || input;
     if (!userMessage.trim()) return;
 
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+    setInput("");
+    setLoading(true);
 
-    // Generate response
+    try {
+      if (propertyId) {
+        const res = await fetch("/api/agent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ propertyId, question: userMessage, context: propertyContext }),
+          signal: AbortSignal.timeout(10000),
+        });
+
+        if (res.ok) {
+          const data = (await res.json()) as { answer: string; confidence: string };
+          setMessages((prev) => [...prev, { role: "agent", content: data.answer, confidence: data.confidence }]);
+          setLoading(false);
+          return;
+        }
+      }
+    } catch {
+      // Fall through to canned responses
+    }
+
+    // Fallback to canned responses
     const response =
       cannedResponses[userMessage] ||
       `I'm analyzing "${userMessage}" for ${propertyAddress}. In the full version, I'll pull from verified source records, scenario models, and risk assessments to provide a grounded answer. For now, this is a placeholder response — but the architecture is ready for real AI integration with source citations.`;
 
     setTimeout(() => {
-      setMessages((prev) => [...prev, { role: "agent", content: response }]);
+      setMessages((prev) => [...prev, { role: "agent", content: response, confidence: "fallback" }]);
+      setLoading(false);
     }, 500);
-
-    setInput("");
   };
 
   return (
@@ -96,8 +121,16 @@ export function AgentPanel({ propertyAddress }: AgentPanelProps) {
               }`}
             >
               {msg.content}
+              {msg.role === "agent" && msg.confidence === "fallback" && (
+                <Badge variant="fallback" className="mt-1 text-[8px]">
+                  AI responses are illustrative
+                </Badge>
+              )}
             </div>
           ))}
+          {loading && (
+            <div className="text-xs text-ivory-500 p-2 animate-pulse">Thinking...</div>
+          )}
         </div>
 
         {/* Input */}
