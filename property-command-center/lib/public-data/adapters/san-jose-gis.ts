@@ -1,0 +1,93 @@
+import { DataAdapter, AdapterResult } from "../types";
+import { SourceRecord } from "../../schemas/source";
+
+/**
+ * San Jose GIS / Open Data Adapter
+ * 
+ * Attempts to fetch real data from San Jose's Open Data portal.
+ * Uses ArcGIS REST API endpoints.
+ * 
+ * Real endpoints:
+ * - Zoning Districts: https://gisdata-csj.opendata.arcgis.com/datasets/zoning-districts
+ * - Parcels: https://gisdata-csj.opendata.arcgis.com/datasets/parcels
+ * - General Plan Land Use: https://gisdata-csj.opendata.arcgis.com/datasets/general-plan-land-use
+ * 
+ * TODO: Implement geocoding to get coordinates from address
+ * TODO: Add spatial query for parcel lookup by coordinates
+ * TODO: Integrate permit data when available
+ */
+export const sanJoseGisAdapter: DataAdapter = {
+  name: "San Jose GIS Open Data",
+  supportedCities: ["San Jose", "SJ"],
+
+  async fetch(address: string, city: string): Promise<AdapterResult> {
+    const sources: SourceRecord[] = [];
+
+    try {
+      // San Jose ArcGIS Feature Server - Zoning Districts
+      // This is a real public ArcGIS endpoint
+      const encodedAddress = encodeURIComponent(address);
+      const zoningUrl = `https://gisdata-csj.opendata.arcgis.com/api/search/v1?q=${encodedAddress}&targets=items`;
+
+      const response = await fetch(zoningUrl, {
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(5000),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        sources.push({
+          id: `sj-gis-${Date.now()}`,
+          sourceName: "San Jose GIS Open Data Portal",
+          sourceType: "gis",
+          title: `GIS data search for ${address}`,
+          url: "https://gisdata-csj.opendata.arcgis.com/",
+          retrievedAt: new Date().toISOString(),
+          confidence: "medium",
+          notes: "Search performed against San Jose open data portal. Spatial query refinement needed.",
+        });
+
+        return {
+          success: true,
+          property: {
+            city: "San Jose",
+            county: "Santa Clara",
+            state: "CA",
+          },
+          sources,
+        };
+      }
+
+      sources.push({
+        id: `sj-gis-fail-${Date.now()}`,
+        sourceName: "San Jose GIS Open Data Portal",
+        sourceType: "gis",
+        title: `No GIS data found for ${address}`,
+        url: "https://gisdata-csj.opendata.arcgis.com/",
+        retrievedAt: new Date().toISOString(),
+        confidence: "low",
+        notes: "Portal query returned no usable results.",
+      });
+
+      return { success: false, sources };
+    } catch (error) {
+      sources.push({
+        id: `sj-gis-error-${Date.now()}`,
+        sourceName: "San Jose GIS Open Data Portal",
+        sourceType: "gis",
+        title: `Failed to query GIS data for ${address}`,
+        url: "https://gisdata-csj.opendata.arcgis.com/",
+        retrievedAt: new Date().toISOString(),
+        confidence: "low",
+        notes: `Fetch failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+      });
+
+      return {
+        success: false,
+        sources,
+        errors: [error instanceof Error ? error.message : "Unknown error"],
+      };
+    }
+  },
+};
