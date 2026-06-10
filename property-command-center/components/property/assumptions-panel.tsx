@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,10 @@ const assumptionLabels: Record<string, { label: string; type: "currency" | "numb
 export function AssumptionsPanel({ assumptions, onUpdate }: AssumptionsPanelProps) {
   const [editMode, setEditMode] = useState(false);
   const [localValues, setLocalValues] = useState(assumptions);
+
+  useEffect(() => {
+    setLocalValues(assumptions);
+  }, [assumptions]);
 
   const handleChange = (key: string, value: string) => {
     const numericFields = ["acquisitionPrice", "lotSize", "buildingSize", "targetUnits", "hardCostPerSqFt", "softCostPercentage", "contingencyPercentage", "targetRent", "targetSaleValue"];

@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
       .map((r) => r.value);
 
     // Normalize results into a single property record
-    const normalizedProperty = normalizeAdapterResults(address, city, state, adapterResults);
+    const normalizedProperty = await normalizeAdapterResults(address, city, state, adapterResults);
 
     return NextResponse.json({
       property: normalizedProperty,

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getMockPropertyById } from "@/lib/data/mock-properties";
 import { PropertyWorkspace } from "@/components/property/property-workspace";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 interface PropertyPageProps {
   params: Promise<{ id: string }>;
@@ -14,7 +15,11 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
     notFound();
   }
 
-  return <PropertyWorkspace data={propertyData} />;
+  return (
+    <ErrorBoundary>
+      <PropertyWorkspace data={propertyData} />
+    </ErrorBoundary>
+  );
 }
 
 export function generateStaticParams() {

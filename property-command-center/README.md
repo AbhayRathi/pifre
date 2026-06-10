@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Property Command Center
+
+**Development intelligence platform for real estate investors, developers, architects, and construction professionals** — answer the question: *should you buy, build, convert, redesign, negotiate, or walk away?*
+
+## Architecture Overview
+
+```
+HTTP Adapter → normalizeAdapterResults → PropertyRecord + SourceRecord[] → Zod validation → React component props
+```
+
+Every data point flows through a confidence-tracked pipeline:
+
+1. **Adapters** fetch from public data portals (SF OpenData, San Jose GIS, Alameda County, CA Geoportal)
+2. **Normalization** merges results, deduplicates, and assigns data quality (`real` / `partial` / `fallback`)
+3. **Zod schemas** validate all data at runtime
+4. **UI components** display results with confidence badges so professionals know what to trust
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the dashboard.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+See [`.env.example`](./.env.example) for all available configuration. The app runs fully with mock data when no environment variables are set.
 
-## Learn More
+## Data Sources
 
-To learn more about Next.js, take a look at the following resources:
+| Adapter | Public URL | Data Provided |
+|---------|-----------|---------------|
+| SF OpenData (DataSF) | https://datasf.org/opendata/ | Assessor records, property tax rolls, zoning, permits |
+| San Jose GIS Open Data | https://gisdata-csj.opendata.arcgis.com/ | Zoning districts, parcels, general plan land use |
+| Alameda County Open Data | https://data.acgov.org/ | Parcel boundaries, assessor rolls, county GIS layers |
+| California State Geoportal | https://gis.data.ca.gov/ | Statewide parcels, hazards, environmental overlays |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript (strict mode) |
+| Styling | Tailwind CSS v4 with custom `@theme` (graphite / ivory / copper) |
+| Validation | Zod |
+| Components | shadcn-style (CVA + Tailwind) |
+| Testing | Vitest + Testing Library + MSW |
+| E2E | Playwright |
 
-## Deploy on Vercel
+## Documentation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [`docs/architecture.md`](./docs/architecture.md) — System architecture and data flow
+- [`docs/v1-spec.md`](./docs/v1-spec.md) — Full V1 product specification
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Confidence Badge Legend
+
+| Badge | Meaning |
+|-------|---------|
+| 🟢 **Real** | Data fetched successfully from a live public API |
+| 🟡 **Partial** | Some data retrieved but incomplete or from secondary sources |
+| 🔴 **Fallback** | Using demo/mock data — requires verification before any decision |
+
+All data confidence levels are tracked end-to-end from adapter to report export. Professional verification is always recommended before acquisition, design, or investment decisions.
+

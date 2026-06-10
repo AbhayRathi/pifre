@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Sidebar } from "@/components/sidebar";
 import { PropertyHeader } from "./property-header";
 import { ParcelVisualization } from "./parcel-visualization";
@@ -24,7 +24,10 @@ export function PropertyWorkspace({ data }: PropertyWorkspaceProps) {
   const [activeScenarioId, setActiveScenarioId] = useState(scenarios[0]?.id || "");
   const [localAssumptions, setLocalAssumptions] = useState(assumptions);
 
-  const report = buildReport(property, scenarios, risks, localAssumptions);
+  const report = useMemo(
+    () => buildReport(property, scenarios, risks, localAssumptions),
+    [property, scenarios, risks, localAssumptions]
+  );
 
   const handleAssumptionUpdate = (key: string, value: number | string) => {
     setLocalAssumptions((prev) => ({ ...prev, [key]: value }));

@@ -20,3 +20,13 @@ export function formatNumber(value: number): string {
 export function generateId(): string {
   return crypto.randomUUID();
 }
+
+export async function generatePropertyId(address: string, city: string): Promise<string> {
+  const input = `${address.toLowerCase().trim()}|${city.toLowerCase().trim()}`;
+  const encoded = new TextEncoder().encode(input);
+  const buffer = await crypto.subtle.digest("SHA-256", encoded);
+  const hex = Array.from(new Uint8Array(buffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  return hex.slice(0, 16);
+}

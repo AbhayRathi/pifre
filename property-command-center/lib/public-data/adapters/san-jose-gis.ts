@@ -35,7 +35,13 @@ export const sanJoseGisAdapter: DataAdapter = {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        const data: unknown = await response.json();
+        const hasResults =
+          data !== null &&
+          typeof data === "object" &&
+          "results" in data &&
+          Array.isArray((data as { results: unknown[] }).results) &&
+          (data as { results: unknown[] }).results.length > 0;
 
         sources.push({
           id: `sj-gis-${Date.now()}`,
@@ -44,8 +50,10 @@ export const sanJoseGisAdapter: DataAdapter = {
           title: `GIS data search for ${address}`,
           url: "https://gisdata-csj.opendata.arcgis.com/",
           retrievedAt: new Date().toISOString(),
-          confidence: "medium",
-          notes: "Search performed against San Jose open data portal. Spatial query refinement needed.",
+          confidence: hasResults ? "high" : "medium",
+          notes: hasResults
+            ? "Search returned matching records from San Jose open data portal."
+            : "Search performed against San Jose open data portal. Spatial query refinement needed.",
         });
 
         return {

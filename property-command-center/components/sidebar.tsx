@@ -24,21 +24,27 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
       <p className="text-[10px] uppercase tracking-wider text-ivory-500 font-medium px-3 mb-2">
         Workspace
       </p>
-      {sections.map((section) => (
-        <button
-          key={section.id}
-          onClick={() => onSectionChange(section.id)}
-          className={cn(
-            "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 w-full text-left",
-            activeSection === section.id
-              ? "bg-copper-600/15 text-copper-300 border border-copper-600/30"
-              : "text-ivory-400 hover:text-ivory-200 hover:bg-graphite-700/50"
-          )}
-        >
-          <span className="text-base">{section.icon}</span>
-          <span>{section.label}</span>
-        </button>
-      ))}
+      <nav role="tablist" aria-label="Workspace sections">
+        {sections.map((section) => (
+          <button
+            key={section.id}
+            role="tab"
+            aria-selected={activeSection === section.id}
+            aria-current={activeSection === section.id ? "page" : undefined}
+            aria-label={section.label}
+            onClick={() => onSectionChange(section.id)}
+            className={cn(
+              "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200 w-full text-left",
+              activeSection === section.id
+                ? "bg-copper-600/15 text-copper-300 border border-copper-600/30"
+                : "text-ivory-400 hover:text-ivory-200 hover:bg-graphite-700/50"
+            )}
+          >
+            <span className="text-base">{section.icon}</span>
+            <span>{section.label}</span>
+          </button>
+        ))}
+      </nav>
     </aside>
   );
 }

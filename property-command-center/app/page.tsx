@@ -1,32 +1,31 @@
-"use client";
-
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { MetricCard } from "@/components/dashboard/metric-card";
 import { PropertyCard } from "@/components/dashboard/property-card";
+import { PropertySearchInput } from "@/components/property-search-input";
 import { getAllMockProperties } from "@/lib/data/mock-properties";
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
   const properties = getAllMockProperties();
 
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
-    const match = properties.find(
-      (p) =>
-        p.property.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.property.city.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    if (match) {
-      router.push(`/properties/${match.property.id}`);
-    } else {
-      router.push(`/properties/${properties[0].property.id}`);
-    }
-  };
+  const propertyIds = properties.map((p) => ({
+    id: p.property.id,
+    address: p.property.address,
+    city: p.property.city,
+  }));
+
+  const totalScenarios = properties.reduce((sum, p) => sum + p.scenarios.length, 0);
+  const totalSources = properties.reduce(
+    (sum, p) => sum + p.property.sourceRecords.length,
+    0
+  );
+  const realSources = properties.reduce(
+    (sum, p) =>
+      sum + p.property.sourceRecords.filter((s) => s.confidence === "high").length,
+    0
+  );
+  const confidenceLabel =
+    realSources > totalSources / 2 ? "High" : realSources > 0 ? "Medium" : "Fallback";
 
   return (
     <div className="max-w-[1400px] mx-auto px-6 py-10">
@@ -46,23 +45,7 @@ export default function DashboardPage() {
         </p>
 
         {/* Search Bar */}
-        <div className="max-w-xl mx-auto mt-8">
-          <div className="flex gap-2">
-            <Input
-              className="h-12 text-base"
-              placeholder="Enter an address or parcel (e.g., 4217 MLK Jr Way, Oakland)"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            />
-            <Button size="lg" onClick={handleSearch}>
-              Analyze Property
-            </Button>
-          </div>
-          <p className="text-[11px] text-ivory-600 mt-2">
-            Try: Oakland, San Jose, or San Francisco addresses
-          </p>
-        </div>
+        <PropertySearchInput propertyIds={propertyIds} />
       </div>
 
       {/* Stats */}
@@ -71,27 +54,51 @@ export default function DashboardPage() {
           title="Properties Analyzed"
           value={properties.length}
           subtitle="Bay Area properties"
-          icon={<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M2 14V6L8 2L14 6V14H10V10H6V14H2Z" fill="currentColor" /></svg>}
+          icon={
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+              <path d="M2 14V6L8 2L14 6V14H10V10H6V14H2Z" fill="currentColor" />
+            </svg>
+          }
         />
         <MetricCard
           title="Scenarios Generated"
-          value={properties.reduce((sum, p) => sum + p.scenarios.length, 0)}
+          value={totalScenarios}
           subtitle="Development options"
-          icon={<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" fill="currentColor" /><rect x="9" y="2" width="5" height="5" rx="1" fill="currentColor" opacity="0.7" /><rect x="2" y="9" width="5" height="5" rx="1" fill="currentColor" opacity="0.5" /><rect x="9" y="9" width="5" height="5" rx="1" fill="currentColor" opacity="0.3" /></svg>}
+          icon={
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+              <rect x="2" y="2" width="5" height="5" rx="1" fill="currentColor" />
+              <rect x="9" y="2" width="5" height="5" rx="1" fill="currentColor" opacity="0.7" />
+              <rect x="2" y="9" width="5" height="5" rx="1" fill="currentColor" opacity="0.5" />
+              <rect x="9" y="9" width="5" height="5" rx="1" fill="currentColor" opacity="0.3" />
+            </svg>
+          }
         />
         <MetricCard
           title="Average Confidence"
-          value="Medium"
-          subtitle="Across all sources"
+          value={confidenceLabel}
+          subtitle={`${realSources} of ${totalSources} sources verified`}
           trend="neutral"
-          icon={<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="2" /><path d="M8 5V8L10 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>}
+          icon={
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="2" />
+              <path d="M8 5V8L10 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          }
         />
         <MetricCard
           title="Potential Units"
-          value={properties.reduce((sum, p) => sum + Math.max(...p.scenarios.map((s) => s.estimatedUnits.max)), 0)}
+          value={properties.reduce(
+            (sum, p) => sum + Math.max(...p.scenarios.map((s) => s.estimatedUnits.max)),
+            0
+          )}
           subtitle="Across all scenarios"
           trend="up"
-          icon={<svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M3 13L3 7L8 3L13 7L13 13" stroke="currentColor" strokeWidth="2" /><rect x="6" y="9" width="4" height="4" fill="currentColor" /></svg>}
+          icon={
+            <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+              <path d="M3 13L3 7L8 3L13 7L13 13" stroke="currentColor" strokeWidth="2" />
+              <rect x="6" y="9" width="4" height="4" fill="currentColor" />
+            </svg>
+          }
         />
       </div>
 
@@ -116,11 +123,9 @@ export default function DashboardPage() {
             Enter any Bay Area address above to generate a comprehensive Property Opportunity Brief
             with scenarios, risks, and recommendations.
           </p>
-          <Button size="lg" className="mt-4" onClick={() => document.querySelector("input")?.focus()}>
-            Get Started
-          </Button>
         </CardContent>
       </Card>
     </div>
   );
 }
+

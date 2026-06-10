@@ -1,17 +1,18 @@
 import { PropertyRecord } from "../schemas/property";
 import { SourceRecord } from "../schemas/source";
 import { AdapterResult } from "./types";
+import { generatePropertyId } from "../utils";
 
 /**
  * Normalize partial adapter results into a single PropertyRecord.
  * Merges data from multiple adapters, preferring real data over fallback.
  */
-export function normalizeAdapterResults(
+export async function normalizeAdapterResults(
   baseAddress: string,
   city: string,
   state: string,
   results: AdapterResult[]
-): PropertyRecord {
+): Promise<PropertyRecord> {
   const allSources: SourceRecord[] = [];
   let merged: Partial<PropertyRecord> = {
     address: baseAddress,
@@ -33,9 +34,10 @@ export function normalizeAdapterResults(
   }
 
   const dataQuality = hasRealData ? "real" : hasPartialData ? "partial" : "fallback";
+  const id = await generatePropertyId(baseAddress, city);
 
   return {
-    id: generatePropertyId(baseAddress, city),
+    id,
     address: merged.address || baseAddress,
     city: merged.city || city,
     county: merged.county,
@@ -61,9 +63,4 @@ function stripUndefined(obj: Record<string, unknown>): Record<string, unknown> {
     }
   }
   return result;
-}
-
-function generatePropertyId(address: string, city: string): string {
-  const base = `${address}-${city}`.toLowerCase().replace(/[^a-z0-9]/g, "-");
-  return base.substring(0, 40);
 }

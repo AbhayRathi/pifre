@@ -77,6 +77,7 @@ export function AgentPanel({ propertyAddress }: AgentPanelProps) {
                   <button
                     key={prompt}
                     onClick={() => handleSend(prompt)}
+                    aria-label={`Ask: ${prompt}`}
                     className="text-left text-[11px] text-ivory-400 hover:text-copper-300 px-2 py-1.5 rounded-md hover:bg-graphite-700/50 transition-colors border border-transparent hover:border-graphite-600/50"
                   >
                     &ldquo;{prompt}&rdquo;
@@ -108,7 +109,7 @@ export function AgentPanel({ propertyAddress }: AgentPanelProps) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend(input)}
           />
-          <Button size="sm" className="h-8 text-xs" onClick={() => handleSend(input)}>
+          <Button size="sm" className="h-8 text-xs" aria-label="Send message" onClick={() => handleSend(input)}>
             Send
           </Button>
         </div>

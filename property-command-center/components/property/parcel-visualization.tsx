@@ -18,10 +18,15 @@ export function ParcelVisualization({ scenarios, activeScenarioId, onScenarioCha
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium text-ivory-300">3D Parcel Massing</h3>
-        <div className="flex gap-1">
+        <div className="flex gap-1" role="tablist" aria-label="Scenario selector">
           {scenarios.map((s) => (
             <button
               key={s.id}
+              role="tab"
+              aria-selected={s.id === activeScenarioId}
+              aria-pressed={s.id === activeScenarioId}
+              aria-label={`View massing for ${s.name}`}
+              data-testid="scenario-tab"
               onClick={() => onScenarioChange(s.id)}
               className={cn(
                 "px-2 py-1 text-[10px] rounded-md transition-all",
@@ -37,7 +42,11 @@ export function ParcelVisualization({ scenarios, activeScenarioId, onScenarioCha
       </div>
 
       {/* Isometric Parcel Visualization */}
-      <div className="relative w-full h-[320px] bg-graphite-800/50 rounded-xl border border-graphite-700/50 overflow-hidden">
+      <div
+        data-testid="massing-3d"
+        role="tabpanel"
+        className="relative w-full h-[320px] bg-graphite-800/50 rounded-xl border border-graphite-700/50 overflow-hidden"
+      >
         {/* Grid background */}
         <div className="absolute inset-0 opacity-10"
           style={{
