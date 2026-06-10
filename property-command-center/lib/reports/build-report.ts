@@ -28,7 +28,7 @@ export function buildReport(
     {
       id: "location-context",
       title: "Location Context",
-      content: `${property.city}, ${property.county || ""} County, California. Coordinates: ${property.latitude || "N/A"}, ${property.longitude || "N/A"}. Local market context, transit access, school quality, and neighborhood character require on-the-ground verification and are not fully captured in this automated brief.`,
+      content: `${property.city}, ${property.county ? `${property.county} County, ` : ""}California. Coordinates: ${property.latitude || "N/A"}, ${property.longitude || "N/A"}. Local market context, transit access, school quality, and neighborhood character require on-the-ground verification and are not fully captured in this automated brief.`,
       order: 3,
     },
     {
