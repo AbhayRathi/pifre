@@ -52,7 +52,10 @@ export function ScenarioComparison({ scenarios, activeScenarioId }: ScenarioComp
           <TableBody>
             {sorted.map((s) => {
               const isActive = s.id === activeScenarioId;
-              const roi = ((s.estimatedValue.max - s.estimatedCost.min) / s.estimatedCost.min * 100).toFixed(1);
+              const roi = (
+                ((s.estimatedValue.max - s.estimatedCost.min) / s.estimatedCost.min) *
+                100
+              ).toFixed(1);
               const feasibility = getFeasibility(s);
               const costBarWidth = maxCost > 0 ? (s.estimatedCost.max / maxCost) * 100 : 0;
 
@@ -65,7 +68,9 @@ export function ScenarioComparison({ scenarios, activeScenarioId }: ScenarioComp
                     {s.name}
                     {isActive && <span className="ml-2 text-copper-400 text-[10px]">▶</span>}
                   </TableCell>
-                  <TableCell>{s.estimatedUnits.min}–{s.estimatedUnits.max}</TableCell>
+                  <TableCell>
+                    {s.estimatedUnits.min}–{s.estimatedUnits.max}
+                  </TableCell>
                   <TableCell className="text-xs">
                     <div>
                       {formatCurrency(s.estimatedCost.min)} – {formatCurrency(s.estimatedCost.max)}
@@ -78,9 +83,7 @@ export function ScenarioComparison({ scenarios, activeScenarioId }: ScenarioComp
                   <TableCell className="text-xs">
                     {formatCurrency(s.estimatedValue.min)} – {formatCurrency(s.estimatedValue.max)}
                   </TableCell>
-                  <TableCell className="text-xs font-medium text-copper-300">
-                    {roi}%
-                  </TableCell>
+                  <TableCell className="text-xs font-medium text-copper-300">{roi}%</TableCell>
                   <TableCell className="text-xs">{s.timeline}</TableCell>
                   <TableCell>
                     <Badge

@@ -6,7 +6,11 @@ describe("getAdaptersForCity", () => {
   it("San Francisco returns SF SODA adapter + fallback adapter", () => {
     const adapters = getAdaptersForCity("San Francisco");
     expect(adapters.length).toBeGreaterThanOrEqual(2);
-    expect(adapters.some((a) => a.name.toLowerCase().includes("san francisco") || a.name.toLowerCase().includes("sf"))).toBe(true);
+    expect(
+      adapters.some(
+        (a) => a.name.toLowerCase().includes("san francisco") || a.name.toLowerCase().includes("sf")
+      )
+    ).toBe(true);
     expect(adapters).toContain(californiaGeoportalAdapter);
   });
 

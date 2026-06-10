@@ -2,7 +2,7 @@
 
 import React from "react";
 import { cn } from "@/lib/utils";
-import { MassingConfig, Scenario } from "@/lib/schemas/scenario";
+import { Scenario } from "@/lib/schemas/scenario";
 
 interface ParcelVisualizationProps {
   scenarios: Scenario[];
@@ -10,7 +10,11 @@ interface ParcelVisualizationProps {
   onScenarioChange: (id: string) => void;
 }
 
-export function ParcelVisualization({ scenarios, activeScenarioId, onScenarioChange }: ParcelVisualizationProps) {
+export function ParcelVisualization({
+  scenarios,
+  activeScenarioId,
+  onScenarioChange,
+}: ParcelVisualizationProps) {
   const activeScenario = scenarios.find((s) => s.id === activeScenarioId) || scenarios[0];
   const config = activeScenario?.massingConfig;
 
@@ -24,7 +28,6 @@ export function ParcelVisualization({ scenarios, activeScenarioId, onScenarioCha
               key={s.id}
               role="tab"
               aria-selected={s.id === activeScenarioId}
-              aria-pressed={s.id === activeScenarioId}
               aria-label={`View massing for ${s.name}`}
               data-testid="scenario-tab"
               onClick={() => onScenarioChange(s.id)}
@@ -48,9 +51,11 @@ export function ParcelVisualization({ scenarios, activeScenarioId, onScenarioCha
         className="relative w-full h-[320px] bg-graphite-800/50 rounded-xl border border-graphite-700/50 overflow-hidden"
       >
         {/* Grid background */}
-        <div className="absolute inset-0 opacity-10"
+        <div
+          className="absolute inset-0 opacity-10"
           style={{
-            backgroundImage: "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
             backgroundSize: "20px 20px",
           }}
         />
@@ -78,7 +83,10 @@ export function ParcelVisualization({ scenarios, activeScenarioId, onScenarioCha
             >
               {/* Parcel label */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-[8px] text-green-400/50 font-mono" style={{ transform: "rotateZ(45deg) rotateX(-55deg)" }}>
+                <span
+                  className="text-[8px] text-green-400/50 font-mono"
+                  style={{ transform: "rotateZ(45deg) rotateX(-55deg)" }}
+                >
                   PARCEL
                 </span>
               </div>
@@ -96,12 +104,7 @@ export function ParcelVisualization({ scenarios, activeScenarioId, onScenarioCha
 
             {/* ADU */}
             {config?.adu && (
-              <IsometricBuilding
-                config={config.adu}
-                label="ADU"
-                offsetX={50}
-                offsetY={50}
-              />
+              <IsometricBuilding config={config.adu} label="ADU" offsetX={50} offsetY={50} />
             )}
 
             {/* Additional structures */}

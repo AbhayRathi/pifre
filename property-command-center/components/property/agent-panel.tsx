@@ -37,7 +37,9 @@ const cannedResponses: Record<string, string> = {
 };
 
 export function AgentPanel({ propertyAddress, propertyId, propertyContext }: AgentPanelProps) {
-  const [messages, setMessages] = useState<Array<{ role: "user" | "agent"; content: string; confidence?: string }>>([]);
+  const [messages, setMessages] = useState<
+    Array<{ role: "user" | "agent"; content: string; confidence?: string }>
+  >([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -60,7 +62,10 @@ export function AgentPanel({ propertyAddress, propertyId, propertyContext }: Age
 
         if (res.ok) {
           const data = (await res.json()) as { answer: string; confidence: string };
-          setMessages((prev) => [...prev, { role: "agent", content: data.answer, confidence: data.confidence }]);
+          setMessages((prev) => [
+            ...prev,
+            { role: "agent", content: data.answer, confidence: data.confidence },
+          ]);
           setLoading(false);
           return;
         }
@@ -75,7 +80,10 @@ export function AgentPanel({ propertyAddress, propertyId, propertyContext }: Age
       `I'm analyzing "${userMessage}" for ${propertyAddress}. In the full version, I'll pull from verified source records, scenario models, and risk assessments to provide a grounded answer. For now, this is a placeholder response — but the architecture is ready for real AI integration with source citations.`;
 
     setTimeout(() => {
-      setMessages((prev) => [...prev, { role: "agent", content: response, confidence: "fallback" }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "agent", content: response, confidence: "fallback" },
+      ]);
       setLoading(false);
     }, 500);
   };
@@ -88,7 +96,9 @@ export function AgentPanel({ propertyAddress, propertyId, propertyContext }: Age
             <span className="text-[10px] text-white font-bold">AI</span>
           </div>
           <CardTitle className="text-sm">Intelligence Agent</CardTitle>
-          <span className="text-[9px] text-ivory-500 bg-graphite-700 px-1.5 py-0.5 rounded">prototype</span>
+          <span className="text-[9px] text-ivory-500 bg-graphite-700 px-1.5 py-0.5 rounded">
+            prototype
+          </span>
         </div>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col gap-3 overflow-hidden">
@@ -128,9 +138,7 @@ export function AgentPanel({ propertyAddress, propertyId, propertyContext }: Age
               )}
             </div>
           ))}
-          {loading && (
-            <div className="text-xs text-ivory-500 p-2 animate-pulse">Thinking...</div>
-          )}
+          {loading && <div className="text-xs text-ivory-500 p-2 animate-pulse">Thinking...</div>}
         </div>
 
         {/* Input */}
@@ -142,7 +150,12 @@ export function AgentPanel({ propertyAddress, propertyId, propertyContext }: Age
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend(input)}
           />
-          <Button size="sm" className="h-8 text-xs" aria-label="Send message" onClick={() => handleSend(input)}>
+          <Button
+            size="sm"
+            className="h-8 text-xs"
+            aria-label="Send message"
+            onClick={() => handleSend(input)}
+          >
             Send
           </Button>
         </div>

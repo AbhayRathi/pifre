@@ -18,14 +18,28 @@ describe("normalizeAdapterResults", () => {
         success: true,
         property: { lotSizeSqFt: 5000, zoning: "RM-2" },
         sources: [
-          { id: "src-1", sourceName: "Adapter A", sourceType: "assessor", title: "Test", retrievedAt: "2024-01-01T00:00:00Z", confidence: "high" },
+          {
+            id: "src-1",
+            sourceName: "Adapter A",
+            sourceType: "assessor",
+            title: "Test",
+            retrievedAt: "2024-01-01T00:00:00Z",
+            confidence: "high",
+          },
         ],
       },
       {
         success: true,
         property: { yearBuilt: 1950 },
         sources: [
-          { id: "src-2", sourceName: "Adapter B", sourceType: "gis", title: "Test 2", retrievedAt: "2024-01-01T00:00:00Z", confidence: "medium" },
+          {
+            id: "src-2",
+            sourceName: "Adapter B",
+            sourceType: "gis",
+            title: "Test 2",
+            retrievedAt: "2024-01-01T00:00:00Z",
+            confidence: "medium",
+          },
         ],
       },
     ];
@@ -38,7 +52,20 @@ describe("normalizeAdapterResults", () => {
 
   it("sets dataQuality to real when at least one adapter succeeded", async () => {
     const results: AdapterResult[] = [
-      { success: true, property: { city: "Oakland" }, sources: [{ id: "s1", sourceName: "A", sourceType: "gis", title: "T", retrievedAt: "2024-01-01T00:00:00Z", confidence: "high" }] },
+      {
+        success: true,
+        property: { city: "Oakland" },
+        sources: [
+          {
+            id: "s1",
+            sourceName: "A",
+            sourceType: "gis",
+            title: "T",
+            retrievedAt: "2024-01-01T00:00:00Z",
+            confidence: "high",
+          },
+        ],
+      },
     ];
     const result = await normalizeAdapterResults("123 Main St", "Oakland", "CA", results);
     expect(result.dataQuality).toBe("real");
@@ -46,16 +73,26 @@ describe("normalizeAdapterResults", () => {
 
   it("sets dataQuality to partial when no adapter succeeded but sources exist", async () => {
     const results: AdapterResult[] = [
-      { success: false, sources: [{ id: "s1", sourceName: "A", sourceType: "gis", title: "T", retrievedAt: "2024-01-01T00:00:00Z", confidence: "low" }] },
+      {
+        success: false,
+        sources: [
+          {
+            id: "s1",
+            sourceName: "A",
+            sourceType: "gis",
+            title: "T",
+            retrievedAt: "2024-01-01T00:00:00Z",
+            confidence: "low",
+          },
+        ],
+      },
     ];
     const result = await normalizeAdapterResults("123 Main St", "Oakland", "CA", results);
     expect(result.dataQuality).toBe("partial");
   });
 
   it("sets dataQuality to fallback when adapter threw with no sources", async () => {
-    const results: AdapterResult[] = [
-      { success: false, sources: [], errors: ["Network error"] },
-    ];
+    const results: AdapterResult[] = [{ success: false, sources: [], errors: ["Network error"] }];
     const result = await normalizeAdapterResults("123 Main St", "Oakland", "CA", results);
     expect(result.dataQuality).toBe("fallback");
   });
@@ -63,7 +100,20 @@ describe("normalizeAdapterResults", () => {
   it("correctly sets fetchedAt in source records", async () => {
     const now = new Date().toISOString();
     const results: AdapterResult[] = [
-      { success: true, property: {}, sources: [{ id: "s1", sourceName: "A", sourceType: "gis", title: "T", retrievedAt: now, confidence: "high" }] },
+      {
+        success: true,
+        property: {},
+        sources: [
+          {
+            id: "s1",
+            sourceName: "A",
+            sourceType: "gis",
+            title: "T",
+            retrievedAt: now,
+            confidence: "high",
+          },
+        ],
+      },
     ];
     const result = await normalizeAdapterResults("123 Main St", "Oakland", "CA", results);
     expect(result.sourceRecords[0].retrievedAt).toBe(now);
@@ -71,13 +121,41 @@ describe("normalizeAdapterResults", () => {
 
   it("returns all sources from all adapters", async () => {
     const results: AdapterResult[] = [
-      { success: true, property: {}, sources: [
-        { id: "s1", sourceName: "A", sourceType: "gis", title: "T1", retrievedAt: "2024-01-01T00:00:00Z", confidence: "high" },
-        { id: "s2", sourceName: "B", sourceType: "assessor", title: "T2", retrievedAt: "2024-01-01T00:00:00Z", confidence: "medium" },
-      ]},
-      { success: false, sources: [
-        { id: "s3", sourceName: "C", sourceType: "fallback", title: "T3", retrievedAt: "2024-01-01T00:00:00Z", confidence: "low" },
-      ]},
+      {
+        success: true,
+        property: {},
+        sources: [
+          {
+            id: "s1",
+            sourceName: "A",
+            sourceType: "gis",
+            title: "T1",
+            retrievedAt: "2024-01-01T00:00:00Z",
+            confidence: "high",
+          },
+          {
+            id: "s2",
+            sourceName: "B",
+            sourceType: "assessor",
+            title: "T2",
+            retrievedAt: "2024-01-01T00:00:00Z",
+            confidence: "medium",
+          },
+        ],
+      },
+      {
+        success: false,
+        sources: [
+          {
+            id: "s3",
+            sourceName: "C",
+            sourceType: "fallback",
+            title: "T3",
+            retrievedAt: "2024-01-01T00:00:00Z",
+            confidence: "low",
+          },
+        ],
+      },
     ];
     const result = await normalizeAdapterResults("123 Main St", "Oakland", "CA", results);
     expect(result.sourceRecords).toHaveLength(3);

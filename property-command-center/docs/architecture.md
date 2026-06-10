@@ -61,6 +61,7 @@ Property Command Center is a Next.js application that provides development intel
 The system is architected to support Retrieval-Augmented Generation:
 
 ### Document Ingestion Pipeline (Planned)
+
 1. User uploads property packet (PDF, plans, notes, documents)
 2. System extracts text using OCR/PDF parsing
 3. Text is chunked into semantic segments
@@ -68,6 +69,7 @@ The system is architected to support Retrieval-Augmented Generation:
 5. Chunks are embedded using vector embeddings
 
 ### Source-Grounded Report Generation (Planned)
+
 1. Report template defines required sections
 2. For each section, system retrieves relevant chunks
 3. AI generates section content citing specific sources
@@ -76,12 +78,14 @@ The system is architected to support Retrieval-Augmented Generation:
 6. Reviewer can approve, edit, or flag sections
 
 ### Architecture Stubs in Current Code
+
 - `lib/reports/report-template.ts` — Section structure for RAG generation
 - `lib/reports/build-report.ts` — Template-based report (pre-AI)
 - `lib/schemas/source.ts` — Source record tracking
 - `lib/public-data/types.ts` — Adapter interface for future sources
 
 ### Future RAG Components
+
 - Document store (Supabase or similar)
 - Embedding pipeline (OpenAI embeddings or open-source)
 - Vector similarity search
@@ -101,15 +105,15 @@ The system is architected to support Retrieval-Augmented Generation:
 
 ## Technology Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript (strict) |
-| Styling | Tailwind CSS v4 |
-| Validation | Zod |
-| Forms | React Hook Form (ready) |
-| UI Components | Custom shadcn-style |
-| State | React useState (local) |
+| Layer         | Technology              |
+| ------------- | ----------------------- |
+| Framework     | Next.js 16 (App Router) |
+| Language      | TypeScript (strict)     |
+| Styling       | Tailwind CSS v4         |
+| Validation    | Zod                     |
+| Forms         | React Hook Form (ready) |
+| UI Components | Custom shadcn-style     |
+| State         | React useState (local)  |
 | Data Fetching | Native fetch + adapters |
 
 ## File Structure

@@ -86,7 +86,11 @@ export function buildReport(
     {
       id: "sources-assumptions",
       title: "Sources and Assumptions",
-      content: `Data Sources (${property.sourceRecords.length}):\n${property.sourceRecords.map((s) => `- ${s.sourceName}: ${s.title} [${s.confidence} confidence]`).join("\n")}\n\nKey Assumptions:\n${Object.entries(assumptions).map(([k, v]) => `- ${k}: ${v}`).join("\n")}\n\nData Quality: ${property.dataQuality}`,
+      content: `Data Sources (${property.sourceRecords.length}):\n${property.sourceRecords.map((s) => `- ${s.sourceName}: ${s.title} [${s.confidence} confidence]`).join("\n")}\n\nKey Assumptions:\n${Object.entries(
+        assumptions
+      )
+        .map(([k, v]) => `- ${k}: ${v}`)
+        .join("\n")}\n\nData Quality: ${property.dataQuality}`,
       order: 11,
     },
     {

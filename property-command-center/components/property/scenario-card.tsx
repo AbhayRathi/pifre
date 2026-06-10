@@ -14,8 +14,20 @@ interface ScenarioCardProps {
 }
 
 export function ScenarioCard({ scenario, isActive, onClick }: ScenarioCardProps) {
-  const riskVariant = scenario.riskLevel === "low" ? "risk_low" : scenario.riskLevel === "medium" ? "risk_medium" : scenario.riskLevel === "high" ? "risk_high" : "risk_critical";
-  const confidenceVariant = scenario.confidence === "high" ? "real" : scenario.confidence === "medium" ? "partial" : "fallback";
+  const riskVariant =
+    scenario.riskLevel === "low"
+      ? "risk_low"
+      : scenario.riskLevel === "medium"
+        ? "risk_medium"
+        : scenario.riskLevel === "high"
+          ? "risk_high"
+          : "risk_critical";
+  const confidenceVariant =
+    scenario.confidence === "high"
+      ? "real"
+      : scenario.confidence === "medium"
+        ? "partial"
+        : "fallback";
 
   return (
     <Card
@@ -41,7 +53,9 @@ export function ScenarioCard({ scenario, isActive, onClick }: ScenarioCardProps)
         <div className="grid grid-cols-2 gap-2 text-xs">
           <div>
             <span className="text-ivory-500">Units:</span>{" "}
-            <span className="text-ivory-200 font-medium">{scenario.estimatedUnits.min}–{scenario.estimatedUnits.max}</span>
+            <span className="text-ivory-200 font-medium">
+              {scenario.estimatedUnits.min}–{scenario.estimatedUnits.max}
+            </span>
           </div>
           <div>
             <span className="text-ivory-500">Timeline:</span>{" "}
@@ -50,13 +64,15 @@ export function ScenarioCard({ scenario, isActive, onClick }: ScenarioCardProps)
           <div>
             <span className="text-ivory-500">Cost:</span>{" "}
             <span className="text-ivory-200 font-medium">
-              {formatCurrency(scenario.estimatedCost.min)}–{formatCurrency(scenario.estimatedCost.max)}
+              {formatCurrency(scenario.estimatedCost.min)}–
+              {formatCurrency(scenario.estimatedCost.max)}
             </span>
           </div>
           <div>
             <span className="text-ivory-500">Value:</span>{" "}
             <span className="text-ivory-200 font-medium">
-              {formatCurrency(scenario.estimatedValue.min)}–{formatCurrency(scenario.estimatedValue.max)}
+              {formatCurrency(scenario.estimatedValue.min)}–
+              {formatCurrency(scenario.estimatedValue.max)}
             </span>
           </div>
         </div>

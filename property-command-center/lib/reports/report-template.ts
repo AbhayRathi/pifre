@@ -1,9 +1,9 @@
 /**
  * Report Template Configuration
- * 
+ *
  * Defines the structure and sections of the Full Property Opportunity Brief.
  * This template will be used by AI report generation in future versions.
- * 
+ *
  * Future RAG integration:
  * 1. User uploads property packet / PDF / plans / notes
  * 2. System extracts text and facts via document processing
@@ -22,7 +22,11 @@ export const reportTemplate = {
     { id: "zoning-land-use", title: "Zoning / Land Use Summary", required: true },
     { id: "development-scenarios", title: "Development Scenarios", required: true },
     { id: "cost-revenue", title: "Cost / Revenue Snapshot", required: true },
-    { id: "affordability-impact", title: "Affordability / Sustainability / Community Impact", required: true },
+    {
+      id: "affordability-impact",
+      title: "Affordability / Sustainability / Community Impact",
+      required: true,
+    },
     { id: "risk-register", title: "Risk Register", required: true },
     { id: "recommendation", title: "Recommendation", required: true },
     { id: "next-steps", title: "Next Steps", required: true },

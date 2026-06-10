@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Report } from "@/lib/schemas/report";
 
@@ -12,12 +12,12 @@ interface ReportPreviewProps {
 export function ReportPreview({ report }: ReportPreviewProps) {
   const handleExport = () => {
     // Mock export - in production would generate PDF
-    const content = report.sections
-      .map((s) => `## ${s.title}\n\n${s.content}`)
-      .join("\n\n---\n\n");
+    const content = report.sections.map((s) => `## ${s.title}\n\n${s.content}`).join("\n\n---\n\n");
 
     const blob = new Blob(
-      [`# ${report.title}\n\nGenerated: ${new Date(report.generatedAt).toLocaleDateString()}\n\n---\n\n${content}`],
+      [
+        `# ${report.title}\n\nGenerated: ${new Date(report.generatedAt).toLocaleDateString()}\n\n---\n\n${content}`,
+      ],
       { type: "text/markdown" }
     );
     const url = URL.createObjectURL(blob);
@@ -48,7 +48,8 @@ export function ReportPreview({ report }: ReportPreviewProps) {
             </div>
             <h2 className="text-lg font-bold text-ivory-100">{report.title}</h2>
             <p className="text-xs text-ivory-500 mt-1">
-              Generated {new Date(report.generatedAt).toLocaleDateString()} • Property Command Center
+              Generated {new Date(report.generatedAt).toLocaleDateString()} • Property Command
+              Center
             </p>
           </div>
 

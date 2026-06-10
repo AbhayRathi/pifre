@@ -3,14 +3,14 @@ import { SourceRecord } from "../../schemas/source";
 
 /**
  * Alameda County Open Data Adapter
- * 
+ *
  * Attempts to fetch real parcel/assessment data from Alameda County.
- * 
+ *
  * Real endpoints:
  * - Alameda County GIS: https://www.acgov.org/government/geospatial.htm
  * - Alameda County Assessor: https://www.acassessor.org/
  * - AC Open Data: https://data.acgov.org/
- * 
+ *
  * TODO: Implement parcel lookup via APN
  * TODO: Add assessor roll data integration
  * TODO: Add recorded document search
@@ -42,7 +42,8 @@ export const alamedaCountyAdapter: DataAdapter = {
           url: "https://data.acgov.org/",
           retrievedAt: new Date().toISOString(),
           confidence: "medium",
-          notes: "Connected to Alameda County data portal. Specific parcel matching requires APN refinement.",
+          notes:
+            "Connected to Alameda County data portal. Specific parcel matching requires APN refinement.",
         });
 
         return {

@@ -13,11 +13,15 @@ interface PropertyCardProps {
 
 export function PropertyCard({ property }: PropertyCardProps) {
   const { property: prop, scenarios } = property;
-  const dataVariant = prop.dataQuality === "real" ? "real" : prop.dataQuality === "partial" ? "partial" : "fallback";
+  const dataVariant =
+    prop.dataQuality === "real" ? "real" : prop.dataQuality === "partial" ? "partial" : "fallback";
 
   return (
     <Link href={`/properties/${prop.id}`}>
-      <Card data-testid="property-card" className="hover:border-copper-600/50 hover:shadow-copper-600/5 hover:shadow-xl transition-all duration-300 cursor-pointer group">
+      <Card
+        data-testid="property-card"
+        className="hover:border-copper-600/50 hover:shadow-copper-600/5 hover:shadow-xl transition-all duration-300 cursor-pointer group"
+      >
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div>
@@ -29,7 +33,11 @@ export function PropertyCard({ property }: PropertyCardProps) {
               </p>
             </div>
             <Badge variant={dataVariant}>
-              {prop.dataQuality === "real" ? "Real Data" : prop.dataQuality === "partial" ? "Partial" : "Demo"}
+              {prop.dataQuality === "real"
+                ? "Real Data"
+                : prop.dataQuality === "partial"
+                  ? "Partial"
+                  : "Demo"}
             </Badge>
           </div>
         </CardHeader>
@@ -46,7 +54,9 @@ export function PropertyCard({ property }: PropertyCardProps) {
               </div>
               <div>
                 <span className="text-ivory-500">Lot:</span>{" "}
-                <span className="text-ivory-200">{prop.lotSizeSqFt?.toLocaleString() || "—"} sf</span>
+                <span className="text-ivory-200">
+                  {prop.lotSizeSqFt?.toLocaleString() || "—"} sf
+                </span>
               </div>
               <div>
                 <span className="text-ivory-500">Built:</span>{" "}
@@ -61,7 +71,8 @@ export function PropertyCard({ property }: PropertyCardProps) {
               </div>
               {scenarios[0] && (
                 <p className="text-xs text-ivory-500 mt-1">
-                  Value range: {formatCurrency(scenarios[0].estimatedValue.min)} – {formatCurrency(scenarios[0].estimatedValue.max)}
+                  Value range: {formatCurrency(scenarios[0].estimatedValue.min)} –{" "}
+                  {formatCurrency(scenarios[0].estimatedValue.max)}
                 </p>
               )}
             </div>

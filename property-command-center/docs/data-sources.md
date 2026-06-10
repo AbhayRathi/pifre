@@ -9,6 +9,7 @@ Property Command Center uses a real-data-first architecture. Public data adapter
 **Portal:** [DataSF](https://datasf.org/opendata/)
 
 **Endpoints Used:**
+
 - Assessor Historical Secured Property Tax Rolls: `https://data.sfgov.org/resource/wv5m-vpq2.json`
 - Building Permits: `https://data.sfgov.org/resource/i98e-djp9.json`
 - Zoning Districts: `https://data.sfgov.org/resource/xvjh-ra6g.json`
@@ -26,6 +27,7 @@ Property Command Center uses a real-data-first architecture. Public data adapter
 **Portal:** [San Jose GIS](https://gisdata-csj.opendata.arcgis.com/)
 
 **Endpoints Used:**
+
 - Zoning Districts Feature Layer
 - Parcels Feature Layer
 - General Plan Land Use
@@ -43,6 +45,7 @@ Property Command Center uses a real-data-first architecture. Public data adapter
 **Portal:** [Alameda County Data](https://data.acgov.org/)
 
 **Endpoints Used:**
+
 - Parcel data
 - Assessor records
 
@@ -59,6 +62,7 @@ Property Command Center uses a real-data-first architecture. Public data adapter
 **Portal:** [CA State Geoportal](https://gis.data.ca.gov/)
 
 **Endpoints Used:**
+
 - Statewide search API
 - California Parcels (CALFIRE/Forestry)
 - Protected Areas (CPAD Holdings)
@@ -84,6 +88,7 @@ Property Command Center uses a real-data-first architecture. Public data adapter
 ## Future Market Comps
 
 Will integrate:
+
 - Recent comparable sales within 0.5 mile radius
 - Rental comps by unit type and size
 - Price per square foot trends
@@ -95,6 +100,7 @@ Will integrate:
 ## Future Construction Cost Sources
 
 Will integrate:
+
 - Hard cost per SF by building type and location
 - Material cost indices
 - Labor rate data
@@ -106,6 +112,7 @@ Will integrate:
 ## Future Permit Data
 
 Will integrate:
+
 - Active permit applications nearby
 - Permit timeline history for jurisdiction
 - Common conditions of approval
@@ -125,13 +132,14 @@ Will integrate:
 
 ## Source Confidence Rules
 
-| Confidence | Criteria |
-|-----------|----------|
-| **High** | Direct match from official source, current data, verified format |
+| Confidence | Criteria                                                              |
+| ---------- | --------------------------------------------------------------------- |
+| **High**   | Direct match from official source, current data, verified format      |
 | **Medium** | Partial match, source is official but data may be stale or incomplete |
-| **Low** | No direct match, inference from nearby data, fallback/demo content |
+| **Low**    | No direct match, inference from nearby data, fallback/demo content    |
 
 All source records include:
+
 - Source name and URL
 - Retrieval timestamp
 - Confidence level

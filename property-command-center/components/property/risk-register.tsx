@@ -52,17 +52,36 @@ function RiskMatrix({ risks }: { risks: Risk[] }) {
         return (
           <circle
             key={risk.id}
-            cx={(3 - sx) * 30 + 15 + (i % 3 - 1) * 5}
+            cx={(3 - sx) * 30 + 15 + ((i % 3) - 1) * 5}
             cy={ly * 30 + 15}
             r="4"
-            fill={risk.severity === "critical" ? "#ef4444" : risk.severity === "high" ? "#f97316" : risk.severity === "medium" ? "#eab308" : "#22c55e"}
+            fill={
+              risk.severity === "critical"
+                ? "#ef4444"
+                : risk.severity === "high"
+                  ? "#f97316"
+                  : risk.severity === "medium"
+                    ? "#eab308"
+                    : "#22c55e"
+            }
             opacity="0.9"
           />
         );
       })}
       {/* Labels */}
-      <text x="60" y="118" textAnchor="middle" fontSize="6" fill="#888">Severity →</text>
-      <text x="2" y="60" textAnchor="middle" fontSize="6" fill="#888" transform="rotate(-90, 6, 60)">Likelihood →</text>
+      <text x="60" y="118" textAnchor="middle" fontSize="6" fill="#888">
+        Severity →
+      </text>
+      <text
+        x="2"
+        y="60"
+        textAnchor="middle"
+        fontSize="6"
+        fill="#888"
+        transform="rotate(-90, 6, 60)"
+      >
+        Likelihood →
+      </text>
     </svg>
   );
 }
@@ -98,7 +117,9 @@ export function RiskRegister({ risks }: RiskRegisterProps) {
         >
           <option value="all">All Categories</option>
           {categories.map((c) => (
-            <option key={c} value={c}>{categoryLabels[c] || c}</option>
+            <option key={c} value={c}>
+              {categoryLabels[c] || c}
+            </option>
           ))}
         </select>
         <select

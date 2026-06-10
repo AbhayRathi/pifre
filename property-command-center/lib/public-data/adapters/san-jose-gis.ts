@@ -3,15 +3,15 @@ import { SourceRecord } from "../../schemas/source";
 
 /**
  * San Jose GIS / Open Data Adapter
- * 
+ *
  * Attempts to fetch real data from San Jose's Open Data portal.
  * Uses ArcGIS REST API endpoints.
- * 
+ *
  * Real endpoints:
  * - Zoning Districts: https://gisdata-csj.opendata.arcgis.com/datasets/zoning-districts
  * - Parcels: https://gisdata-csj.opendata.arcgis.com/datasets/parcels
  * - General Plan Land Use: https://gisdata-csj.opendata.arcgis.com/datasets/general-plan-land-use
- * 
+ *
  * TODO: Implement geocoding to get coordinates from address
  * TODO: Add spatial query for parcel lookup by coordinates
  * TODO: Integrate permit data when available
@@ -20,7 +20,7 @@ export const sanJoseGisAdapter: DataAdapter = {
   name: "San Jose GIS Open Data",
   supportedCities: ["San Jose", "SJ"],
 
-  async fetch(address: string, city: string): Promise<AdapterResult> {
+  async fetch(address: string, _city: string): Promise<AdapterResult> {
     const sources: SourceRecord[] = [];
 
     try {

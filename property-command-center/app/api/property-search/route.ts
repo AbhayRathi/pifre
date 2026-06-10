@@ -4,7 +4,11 @@ import { getAllMockProperties } from "@/lib/data/mock-properties";
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const raw = searchParams.get("q") ?? "";
-  const query = raw.trim().toLowerCase().slice(0, 200).replace(/[<>"'`;]/g, "");
+  const query = raw
+    .trim()
+    .toLowerCase()
+    .slice(0, 200)
+    .replace(/[<>"'`;]/g, "");
   if (!query) return NextResponse.json({ results: [] });
 
   const properties = getAllMockProperties();

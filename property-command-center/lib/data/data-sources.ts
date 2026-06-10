@@ -17,7 +17,8 @@ export interface DataSourceInfo {
 export const dataSources: DataSourceInfo[] = [
   {
     name: "San Francisco OpenData (DataSF)",
-    description: "Assessor records, property tax rolls, zoning districts, and permit data for SF properties.",
+    description:
+      "Assessor records, property tax rolls, zoning districts, and permit data for SF properties.",
     type: "assessor / zoning / permit",
     url: "https://datasf.org/opendata/",
     coverage: "San Francisco",
@@ -44,7 +45,8 @@ export const dataSources: DataSourceInfo[] = [
   },
   {
     name: "California State Geoportal",
-    description: "Statewide GIS data including parcels, hazards, protected areas, and environmental overlays.",
+    description:
+      "Statewide GIS data including parcels, hazards, protected areas, and environmental overlays.",
     type: "gis / environmental",
     url: "https://gis.data.ca.gov/",
     coverage: "All California",
@@ -76,9 +78,7 @@ export function getAdaptersForCity(city: string): DataAdapter[] {
     if (source.adapter && source.status !== "planned") {
       if (
         source.adapter.supportedCities.length === 0 ||
-        source.adapter.supportedCities.some(
-          (c) => c.toLowerCase() === city.toLowerCase()
-        )
+        source.adapter.supportedCities.some((c) => c.toLowerCase() === city.toLowerCase())
       ) {
         adapters.push(source.adapter);
       }

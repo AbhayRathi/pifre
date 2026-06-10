@@ -81,10 +81,7 @@ export function PropertyWorkspace({ data }: PropertyWorkspaceProps) {
       case "assumptions":
         return (
           <div className="max-w-xl">
-            <AssumptionsPanel
-              assumptions={localAssumptions}
-              onUpdate={handleAssumptionUpdate}
-            />
+            <AssumptionsPanel assumptions={localAssumptions} onUpdate={handleAssumptionUpdate} />
           </div>
         );
       case "risks":
@@ -104,24 +101,31 @@ export function PropertyWorkspace({ data }: PropertyWorkspaceProps) {
       <Sidebar activeSection={activeSection} onSectionChange={setActiveSection} />
 
       {/* Center Content */}
-      <div className="flex-1 overflow-y-auto p-6">
-        {renderCenterContent()}
-      </div>
+      <div className="flex-1 overflow-y-auto p-6">{renderCenterContent()}</div>
 
       {/* Right Intelligence Panel */}
       <div className="w-80 border-l border-graphite-700/50 bg-graphite-800/20 p-4 flex flex-col gap-4 overflow-y-auto">
-        <AgentPanel propertyAddress={property.address} propertyId={property.id} propertyContext={{ scenarios, risks }} />
-        <AssumptionsPanel
-          assumptions={localAssumptions}
-          onUpdate={handleAssumptionUpdate}
+        <AgentPanel
+          propertyAddress={property.address}
+          propertyId={property.id}
+          propertyContext={{ scenarios, risks }}
         />
+        <AssumptionsPanel assumptions={localAssumptions} onUpdate={handleAssumptionUpdate} />
         <div className="space-y-2">
           <h4 className="text-[10px] uppercase tracking-wider text-ivory-500 font-medium">
             Suggested Next Actions
           </h4>
           <div className="space-y-1.5">
-            {["Verify zoning with Planning Dept", "Order title report", "Get Phase I ESA quote", "Pull comparable sales"].map((action) => (
-              <div key={action} className="flex items-center gap-2 text-xs text-ivory-400 p-1.5 rounded hover:bg-graphite-700/30">
+            {[
+              "Verify zoning with Planning Dept",
+              "Order title report",
+              "Get Phase I ESA quote",
+              "Pull comparable sales",
+            ].map((action) => (
+              <div
+                key={action}
+                className="flex items-center gap-2 text-xs text-ivory-400 p-1.5 rounded hover:bg-graphite-700/30"
+              >
                 <span className="text-copper-400">→</span>
                 {action}
               </div>

@@ -1,6 +1,6 @@
 # Property Command Center
 
-**Development intelligence platform for real estate investors, developers, architects, and construction professionals** — answer the question: *should you buy, build, convert, redesign, negotiate, or walk away?*
+**Development intelligence platform for real estate investors, developers, architects, and construction professionals** — answer the question: _should you buy, build, convert, redesign, negotiate, or walk away?_
 
 ## Architecture Overview
 
@@ -30,24 +30,24 @@ See [`.env.example`](./.env.example) for all available configuration. The app ru
 
 ## Data Sources
 
-| Adapter | Public URL | Data Provided |
-|---------|-----------|---------------|
-| SF OpenData (DataSF) | https://datasf.org/opendata/ | Assessor records, property tax rolls, zoning, permits |
-| San Jose GIS Open Data | https://gisdata-csj.opendata.arcgis.com/ | Zoning districts, parcels, general plan land use |
-| Alameda County Open Data | https://data.acgov.org/ | Parcel boundaries, assessor rolls, county GIS layers |
-| California State Geoportal | https://gis.data.ca.gov/ | Statewide parcels, hazards, environmental overlays |
+| Adapter                    | Public URL                               | Data Provided                                         |
+| -------------------------- | ---------------------------------------- | ----------------------------------------------------- |
+| SF OpenData (DataSF)       | https://datasf.org/opendata/             | Assessor records, property tax rolls, zoning, permits |
+| San Jose GIS Open Data     | https://gisdata-csj.opendata.arcgis.com/ | Zoning districts, parcels, general plan land use      |
+| Alameda County Open Data   | https://data.acgov.org/                  | Parcel boundaries, assessor rolls, county GIS layers  |
+| California State Geoportal | https://gis.data.ca.gov/                 | Statewide parcels, hazards, environmental overlays    |
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript (strict mode) |
-| Styling | Tailwind CSS v4 with custom `@theme` (graphite / ivory / copper) |
-| Validation | Zod |
-| Components | shadcn-style (CVA + Tailwind) |
-| Testing | Vitest + Testing Library + MSW |
-| E2E | Playwright |
+| Layer      | Technology                                                       |
+| ---------- | ---------------------------------------------------------------- |
+| Framework  | Next.js 16 (App Router)                                          |
+| Language   | TypeScript (strict mode)                                         |
+| Styling    | Tailwind CSS v4 with custom `@theme` (graphite / ivory / copper) |
+| Validation | Zod                                                              |
+| Components | shadcn-style (CVA + Tailwind)                                    |
+| Testing    | Vitest + Testing Library + MSW                                   |
+| E2E        | Playwright                                                       |
 
 ## Documentation
 
@@ -56,11 +56,10 @@ See [`.env.example`](./.env.example) for all available configuration. The app ru
 
 ## Confidence Badge Legend
 
-| Badge | Meaning |
-|-------|---------|
-| 🟢 **Real** | Data fetched successfully from a live public API |
-| 🟡 **Partial** | Some data retrieved but incomplete or from secondary sources |
+| Badge           | Meaning                                                          |
+| --------------- | ---------------------------------------------------------------- |
+| 🟢 **Real**     | Data fetched successfully from a live public API                 |
+| 🟡 **Partial**  | Some data retrieved but incomplete or from secondary sources     |
 | 🔴 **Fallback** | Using demo/mock data — requires verification before any decision |
 
 All data confidence levels are tracked end-to-end from adapter to report export. Professional verification is always recommended before acquisition, design, or investment decisions.
-

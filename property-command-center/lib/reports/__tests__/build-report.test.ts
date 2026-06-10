@@ -10,7 +10,14 @@ const mockProperty: PropertyRecord = {
   city: "Oakland",
   state: "CA",
   sourceRecords: [
-    { id: "s1", sourceName: "Test", sourceType: "assessor", title: "Test", retrievedAt: "2024-01-01T00:00:00Z", confidence: "high" },
+    {
+      id: "s1",
+      sourceName: "Test",
+      sourceType: "assessor",
+      title: "Test",
+      retrievedAt: "2024-01-01T00:00:00Z",
+      confidence: "high",
+    },
   ],
   dataQuality: "fallback",
   lotSizeSqFt: 5000,
@@ -36,7 +43,15 @@ const mockScenarios: Scenario[] = [
 ];
 
 const mockRisks: Risk[] = [
-  { id: "r1", category: "zoning", severity: "medium", likelihood: "possible", summary: "Zoning issue", mitigation: "Verify", verifiedBy: "Attorney" },
+  {
+    id: "r1",
+    category: "zoning",
+    severity: "medium",
+    likelihood: "possible",
+    summary: "Zoning issue",
+    mitigation: "Verify",
+    verifiedBy: "Attorney",
+  },
 ];
 
 const mockAssumptions = {
@@ -74,7 +89,9 @@ describe("buildReport", () => {
   it("report.disclaimer contains the word professional", () => {
     const report = buildReport(mockProperty, mockScenarios, mockRisks, mockAssumptions);
     const lowerDisclaimer = report.disclaimer.toLowerCase();
-    expect(lowerDisclaimer.includes("professional") || lowerDisclaimer.includes("fallback")).toBe(true);
+    expect(lowerDisclaimer.includes("professional") || lowerDisclaimer.includes("fallback")).toBe(
+      true
+    );
   });
 
   it("generates correctly when scenarios is empty", () => {

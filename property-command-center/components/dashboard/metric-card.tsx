@@ -22,21 +22,19 @@ export function MetricCard({ title, value, subtitle, icon, trend, className }: M
             <p className="text-sm text-ivory-400 font-medium">{title}</p>
             <p className="text-2xl font-bold text-ivory-100">{value}</p>
             {subtitle && (
-              <p className={cn(
-                "text-xs",
-                trend === "up" && "text-green-400",
-                trend === "down" && "text-red-400",
-                (!trend || trend === "neutral") && "text-ivory-500"
-              )}>
+              <p
+                className={cn(
+                  "text-xs",
+                  trend === "up" && "text-green-400",
+                  trend === "down" && "text-red-400",
+                  (!trend || trend === "neutral") && "text-ivory-500"
+                )}
+              >
                 {subtitle}
               </p>
             )}
           </div>
-          {icon && (
-            <div className="p-2 rounded-lg bg-copper-600/10 text-copper-400">
-              {icon}
-            </div>
-          )}
+          {icon && <div className="p-2 rounded-lg bg-copper-600/10 text-copper-400">{icon}</div>}
         </div>
       </CardContent>
     </Card>

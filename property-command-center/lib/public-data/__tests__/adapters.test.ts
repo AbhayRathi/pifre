@@ -7,63 +7,31 @@ import { alamedaCountyAdapter } from "../adapters/alameda-county";
 import { californiaGeoportalAdapter } from "../adapters/california-geoportal";
 
 const handlers = [
-  // SF Property - success
-  http.get("https://data.sfgov.org/resource/wv5m-vpq2.json", ({ request }) => {
-    const url = new URL(request.url);
-    const where = url.searchParams.get("$where") || "";
-    if (where.includes("success")) {
-      return HttpResponse.json([
-        {
-          lot_area: "5000",
-          building_area: "2000",
-          property_class_code_definition: "Residential",
-          year_property_built: "1950",
-        },
-      ]);
-    }
-    if (where.includes("notfound")) {
-      return new HttpResponse(null, { status: 404 });
-    }
-    return HttpResponse.json([]);
+  // SF Property - success (SODA API)
+  http.get("https://data.sfgov.org/resource/wv5m-vpq2.json", () => {
+    return HttpResponse.json([
+      {
+        lot_area: "5000",
+        building_area: "2000",
+        property_class_code_definition: "Residential",
+        year_property_built: "1950",
+      },
+    ]);
   }),
 
   // San Jose GIS - success
-  http.get("https://gisdata-csj.opendata.arcgis.com/api/search/v1", ({ request }) => {
-    const url = new URL(request.url);
-    const q = url.searchParams.get("q") || "";
-    if (q.includes("success")) {
-      return HttpResponse.json({ results: [{ title: "Test parcel" }] });
-    }
-    if (q.includes("notfound")) {
-      return new HttpResponse(null, { status: 404 });
-    }
-    return HttpResponse.json({ results: [] });
+  http.get("https://gisdata-csj.opendata.arcgis.com/api/search/v1", () => {
+    return HttpResponse.json({ results: [{ title: "Test parcel" }] });
   }),
 
-  // Alameda County - success
-  http.get("https://data.acgov.org/api/search/v1", ({ request }) => {
-    const url = new URL(request.url);
-    const q = url.searchParams.get("q") || "";
-    if (q.includes("success")) {
-      return HttpResponse.json({ results: [{ title: "Alameda parcel" }] });
-    }
-    if (q.includes("notfound")) {
-      return new HttpResponse(null, { status: 404 });
-    }
-    return HttpResponse.json({ results: [] });
+  // Alameda County
+  http.get("https://data.acgov.org/api/views/metadata/v1", () => {
+    return HttpResponse.json({ name: "parcels", id: "abc123" });
   }),
 
-  // California Geoportal - success
-  http.get("https://gis.data.ca.gov/api/search/v1", ({ request }) => {
-    const url = new URL(request.url);
-    const q = url.searchParams.get("q") || "";
-    if (q.includes("success")) {
-      return HttpResponse.json({ results: [{ title: "CA parcel" }] });
-    }
-    if (q.includes("notfound")) {
-      return new HttpResponse(null, { status: 404 });
-    }
-    return HttpResponse.json({ results: [] });
+  // California Geoportal
+  http.get("https://gis.data.ca.gov/api/search/v1", () => {
+    return HttpResponse.json({ results: [{ title: "CA parcel" }] });
   }),
 ];
 
@@ -75,7 +43,7 @@ afterAll(() => server.close());
 
 describe("SF Property Adapter", () => {
   it("success path: returns SourceRecord with high confidence on 200", async () => {
-    const result = await sfPropertyAdapter.fetch("success address", "San Francisco");
+    const result = await sfPropertyAdapter.fetch("123 Main St", "San Francisco");
     expect(result.success).toBe(true);
     expect(result.sources.length).toBeGreaterThan(0);
     expect(result.sources[0].confidence).toBe("high");
@@ -107,7 +75,7 @@ describe("SF Property Adapter", () => {
 
 describe("San Jose GIS Adapter", () => {
   it("success path: returns SourceRecord on 200", async () => {
-    const result = await sanJoseGisAdapter.fetch("success address", "San Jose");
+    const result = await sanJoseGisAdapter.fetch("123 Main St", "San Jose");
     expect(result.success).toBe(true);
     expect(result.sources.length).toBeGreaterThan(0);
   });
@@ -137,14 +105,14 @@ describe("San Jose GIS Adapter", () => {
 
 describe("Alameda County Adapter", () => {
   it("success path: returns SourceRecord on 200", async () => {
-    const result = await alamedaCountyAdapter.fetch("success address", "Oakland");
+    const result = await alamedaCountyAdapter.fetch("123 Main St", "Oakland");
     expect(result.success).toBe(true);
     expect(result.sources.length).toBeGreaterThan(0);
   });
 
   it("non-200 path: returns SourceRecord with low confidence", async () => {
     server.use(
-      http.get("https://data.acgov.org/api/search/v1", () => {
+      http.get("https://data.acgov.org/api/views/metadata/v1", () => {
         return new HttpResponse(null, { status: 404 });
       })
     );
@@ -154,7 +122,7 @@ describe("Alameda County Adapter", () => {
 
   it("network error path: returns fallback (no throw)", async () => {
     server.use(
-      http.get("https://data.acgov.org/api/search/v1", () => {
+      http.get("https://data.acgov.org/api/views/metadata/v1", () => {
         return HttpResponse.error();
       })
     );
@@ -166,7 +134,7 @@ describe("Alameda County Adapter", () => {
 
 describe("California Geoportal Adapter", () => {
   it("success path: returns SourceRecord on 200", async () => {
-    const result = await californiaGeoportalAdapter.fetch("success address", "Any City");
+    const result = await californiaGeoportalAdapter.fetch("123 Main St", "Any City");
     expect(result.success).toBe(true);
     expect(result.sources.length).toBeGreaterThan(0);
   });

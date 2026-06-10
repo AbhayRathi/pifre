@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,10 @@ interface AssumptionsPanelProps {
   onUpdate?: (key: string, value: number | string) => void;
 }
 
-const assumptionLabels: Record<string, { label: string; type: "currency" | "number" | "percentage" | "text" }> = {
+const assumptionLabels: Record<
+  string,
+  { label: string; type: "currency" | "number" | "percentage" | "text" }
+> = {
   acquisitionPrice: { label: "Acquisition Price", type: "currency" },
   lotSize: { label: "Lot Size (sf)", type: "number" },
   buildingSize: { label: "Building Size (sf)", type: "number" },
@@ -26,16 +29,23 @@ const assumptionLabels: Record<string, { label: string; type: "currency" | "numb
 
 export function AssumptionsPanel({ assumptions, onUpdate }: AssumptionsPanelProps) {
   const [editMode, setEditMode] = useState(false);
-  const [localValues, setLocalValues] = useState(assumptions);
 
-  useEffect(() => {
-    setLocalValues(assumptions);
-  }, [assumptions]);
+  // Use assumptions prop directly as source of truth - parent controls state
+  const localValues = assumptions;
 
   const handleChange = (key: string, value: string) => {
-    const numericFields = ["acquisitionPrice", "lotSize", "buildingSize", "targetUnits", "hardCostPerSqFt", "softCostPercentage", "contingencyPercentage", "targetRent", "targetSaleValue"];
+    const numericFields = [
+      "acquisitionPrice",
+      "lotSize",
+      "buildingSize",
+      "targetUnits",
+      "hardCostPerSqFt",
+      "softCostPercentage",
+      "contingencyPercentage",
+      "targetRent",
+      "targetSaleValue",
+    ];
     const newValue = numericFields.includes(key) ? Number(value) || 0 : value;
-    setLocalValues((prev) => ({ ...prev, [key]: newValue }));
     onUpdate?.(key, newValue);
   };
 
@@ -71,10 +81,10 @@ export function AssumptionsPanel({ assumptions, onUpdate }: AssumptionsPanelProp
                   {config.type === "currency"
                     ? formatCurrency(Number(value))
                     : config.type === "percentage"
-                    ? `${value}%`
-                    : typeof value === "number"
-                    ? value.toLocaleString()
-                    : value}
+                      ? `${value}%`
+                      : typeof value === "number"
+                        ? value.toLocaleString()
+                        : value}
                 </span>
               )}
             </div>

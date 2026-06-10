@@ -3,14 +3,14 @@ import { SourceRecord } from "../../schemas/source";
 
 /**
  * California State Geoportal Adapter
- * 
+ *
  * Fallback adapter that queries California-wide GIS data.
- * 
+ *
  * Real endpoints:
  * - CA State Geoportal: https://gis.data.ca.gov/
  * - CA Parcels: https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-parcels
  * - CA Protected Areas: https://gis.data.ca.gov/datasets/CPAD-Holdings
- * 
+ *
  * TODO: Implement statewide parcel geometry lookup
  * TODO: Add CEQA/environmental overlay data
  * TODO: Integrate hazard zones (fire, flood, earthquake)
@@ -42,7 +42,8 @@ export const californiaGeoportalAdapter: DataAdapter = {
           url: "https://gis.data.ca.gov/",
           retrievedAt: new Date().toISOString(),
           confidence: "low",
-          notes: "State-level search completed. More specific local data sources should be preferred.",
+          notes:
+            "State-level search completed. More specific local data sources should be preferred.",
         });
 
         return {

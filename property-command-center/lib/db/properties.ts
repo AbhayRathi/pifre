@@ -3,25 +3,41 @@ import { getMockPropertyById, getAllMockProperties } from "@/lib/data/mock-prope
 
 const useSupabase = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
 
+interface PropertyRow {
+  id: string;
+  address: string;
+  city: string;
+  state: string;
+  parcel_number: string | null;
+  zoning: string | null;
+  lot_size_sqft: number | null;
+  current_use: string | null;
+  year_built: number | null;
+}
+
+function rowToProperty(data: PropertyRow): PropertyRecord {
+  return {
+    id: data.id,
+    address: data.address,
+    city: data.city,
+    state: data.state,
+    parcelNumber: data.parcel_number ?? undefined,
+    zoning: data.zoning ?? undefined,
+    lotSizeSqFt: data.lot_size_sqft ?? undefined,
+    currentUse: data.current_use ?? undefined,
+    yearBuilt: data.year_built ?? undefined,
+    sourceRecords: [],
+    dataQuality: "partial",
+  };
+}
+
 export async function getPropertyById(id: string): Promise<PropertyRecord | null> {
   if (useSupabase) {
     const { createServerClient } = await import("./supabase");
     const client = createServerClient();
     const { data } = await client.from("properties").select("*").eq("id", id).single();
     if (!data) return null;
-    return {
-      id: data.id,
-      address: data.address,
-      city: data.city,
-      state: data.state,
-      parcelNumber: data.parcel_number ?? undefined,
-      zoning: data.zoning ?? undefined,
-      lotSizeSqFt: data.lot_size_sqft ?? undefined,
-      currentUse: data.current_use ?? undefined,
-      yearBuilt: data.year_built ?? undefined,
-      sourceRecords: [],
-      dataQuality: "partial",
-    };
+    return rowToProperty(data as unknown as PropertyRow);
   }
 
   const mock = getMockPropertyById(id);
@@ -38,19 +54,7 @@ export async function searchProperties(query: string): Promise<PropertyRecord[]>
       .or(`address.ilike.%${query}%,city.ilike.%${query}%`)
       .limit(20);
     if (!data) return [];
-    return data.map((row) => ({
-      id: row.id,
-      address: row.address,
-      city: row.city,
-      state: row.state,
-      parcelNumber: row.parcel_number ?? undefined,
-      zoning: row.zoning ?? undefined,
-      lotSizeSqFt: row.lot_size_sqft ?? undefined,
-      currentUse: row.current_use ?? undefined,
-      yearBuilt: row.year_built ?? undefined,
-      sourceRecords: [],
-      dataQuality: "partial",
-    }));
+    return (data as unknown as PropertyRow[]).map(rowToProperty);
   }
 
   const all = getAllMockProperties();
@@ -69,7 +73,7 @@ export async function getAllPropertyIds(): Promise<string[]> {
     const { createServerClient } = await import("./supabase");
     const client = createServerClient();
     const { data } = await client.from("properties").select("id");
-    return data?.map((row) => row.id) ?? [];
+    return (data as unknown as { id: string }[])?.map((row) => row.id) ?? [];
   }
 
   return getAllMockProperties().map((p) => p.property.id);

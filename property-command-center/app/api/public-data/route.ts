@@ -10,10 +10,7 @@ export async function GET(request: NextRequest) {
   const state = searchParams.get("state") || "CA";
 
   if (!address && !city) {
-    return NextResponse.json(
-      { error: "Address or city parameter required" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Address or city parameter required" }, { status: 400 });
   }
 
   try {
@@ -27,7 +24,10 @@ export async function GET(request: NextRequest) {
 
     // Extract successful results
     const adapterResults = results
-      .filter((r): r is PromiseFulfilledResult<Awaited<ReturnType<typeof adapters[0]["fetch"]>>> => r.status === "fulfilled")
+      .filter(
+        (r): r is PromiseFulfilledResult<Awaited<ReturnType<(typeof adapters)[0]["fetch"]>>> =>
+          r.status === "fulfilled"
+      )
       .map((r) => r.value);
 
     // Normalize results into a single property record
@@ -41,7 +41,10 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     // If real data fetch fails entirely, try to match with mock data
-    const mockId = address.toLowerCase().replace(/[^a-z0-9]/g, "-").substring(0, 20);
+    const mockId = address
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "-")
+      .substring(0, 20);
     const mockProperty = getMockPropertyById(mockId);
 
     if (mockProperty) {
@@ -54,9 +57,12 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    return NextResponse.json({
-      error: "Failed to fetch property data",
-      details: error instanceof Error ? error.message : "Unknown error",
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Failed to fetch property data",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
   }
 }

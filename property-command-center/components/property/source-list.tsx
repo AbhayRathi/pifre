@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SourceRecord } from "@/lib/schemas/source";
 
@@ -23,7 +23,11 @@ export function SourceList({ sources }: SourceListProps) {
                     <span className="text-xs font-medium text-ivory-200">{source.sourceName}</span>
                     <Badge
                       variant={
-                        source.confidence === "high" ? "real" : source.confidence === "medium" ? "partial" : "fallback"
+                        source.confidence === "high"
+                          ? "real"
+                          : source.confidence === "medium"
+                            ? "partial"
+                            : "fallback"
                       }
                     >
                       {source.confidence}

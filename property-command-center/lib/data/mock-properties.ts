@@ -54,7 +54,8 @@ export const mockProperties: MockProperty[] = [
         id: "oak-s1",
         name: "Conservative Improvement",
         type: "conservative",
-        description: "Renovate existing home, add permitted garage conversion. Minimal entitlement risk.",
+        description:
+          "Renovate existing home, add permitted garage conversion. Minimal entitlement risk.",
         estimatedUnits: { min: 1, max: 2 },
         estimatedCost: { min: 150000, max: 250000 },
         estimatedValue: { min: 850000, max: 1050000 },
@@ -72,14 +73,16 @@ export const mockProperties: MockProperty[] = [
         id: "oak-s2",
         name: "ADU + Junior ADU",
         type: "adu_expansion",
-        description: "Add detached ADU (600sf) in rear yard plus JADU conversion in existing structure. SB 9 compliant.",
+        description:
+          "Add detached ADU (600sf) in rear yard plus JADU conversion in existing structure. SB 9 compliant.",
         estimatedUnits: { min: 3, max: 3 },
         estimatedCost: { min: 280000, max: 420000 },
         estimatedValue: { min: 1200000, max: 1500000 },
         timeline: "10-14 months",
         riskLevel: "medium",
         confidence: "high",
-        recommendation: "Strong cashflow play. ADU rent covers carrying costs. SB 9 streamlines approvals.",
+        recommendation:
+          "Strong cashflow play. ADU rent covers carrying costs. SB 9 streamlines approvals.",
         massingConfig: {
           mainBuilding: { width: 30, depth: 40, height: 25, color: "#8B7355" },
           adu: { width: 20, depth: 30, height: 15, color: "#A0926B" },
@@ -91,14 +94,16 @@ export const mockProperties: MockProperty[] = [
         id: "oak-s3",
         name: "Max Yield Multifamily",
         type: "max_yield",
-        description: "Demolish and build 4-6 unit multifamily under RM-2 zoning. Maximum density play.",
+        description:
+          "Demolish and build 4-6 unit multifamily under RM-2 zoning. Maximum density play.",
         estimatedUnits: { min: 4, max: 6 },
         estimatedCost: { min: 1200000, max: 1800000 },
         estimatedValue: { min: 2200000, max: 3000000 },
         timeline: "18-24 months",
         riskLevel: "high",
         confidence: "medium",
-        recommendation: "Highest return but requires significant capital and entitlement navigation. Verify density bonus eligibility.",
+        recommendation:
+          "Highest return but requires significant capital and entitlement navigation. Verify density bonus eligibility.",
         massingConfig: {
           mainBuilding: { width: 40, depth: 50, height: 40, color: "#6B5B4F" },
           additionalStructures: [
@@ -113,14 +118,16 @@ export const mockProperties: MockProperty[] = [
         id: "oak-s4",
         name: "Affordable / Community Housing",
         type: "affordable_sustainable",
-        description: "Partner with affordable housing developer. Utilize density bonus and tax credits for 100% affordable project.",
+        description:
+          "Partner with affordable housing developer. Utilize density bonus and tax credits for 100% affordable project.",
         estimatedUnits: { min: 6, max: 8 },
         estimatedCost: { min: 1800000, max: 2400000 },
         estimatedValue: { min: 2000000, max: 2800000 },
         timeline: "24-36 months",
         riskLevel: "medium",
         confidence: "medium",
-        recommendation: "Lower direct profit but significant community impact. Tax credits and density bonus offset costs. Requires affordable housing partner.",
+        recommendation:
+          "Lower direct profit but significant community impact. Tax credits and density bonus offset costs. Requires affordable housing partner.",
         massingConfig: {
           mainBuilding: { width: 45, depth: 55, height: 45, color: "#5D7A5D" },
           additionalStructures: [
@@ -133,12 +140,66 @@ export const mockProperties: MockProperty[] = [
       },
     ],
     risks: [
-      { id: "r-oak-1", category: "zoning", severity: "medium", likelihood: "possible", summary: "RM-2 allows multifamily but design review may require modifications", mitigation: "Pre-application meeting with Oakland Planning. Review design guidelines early.", verifiedBy: "Land use attorney or planning consultant" },
-      { id: "r-oak-2", category: "permitting", severity: "medium", likelihood: "likely", summary: "Oakland permit timelines are 6-12 months for multifamily", mitigation: "Submit complete application. Use permit expediter. Consider SB 35 streamlining if affordable.", verifiedBy: "Permit expediter" },
-      { id: "r-oak-3", category: "construction", severity: "high", likelihood: "possible", summary: "1923 structure may have lead, asbestos, or foundation issues requiring abatement", mitigation: "Phase I environmental assessment before acquisition. Budget 15% contingency for hazmat.", verifiedBy: "Environmental consultant" },
-      { id: "r-oak-4", category: "financing", severity: "medium", likelihood: "possible", summary: "Construction lending rates elevated. LTV constraints may require additional equity.", mitigation: "Secure term sheet before close. Explore CDFIs or mission-aligned lenders for affordable scenarios.", verifiedBy: "Construction lender" },
-      { id: "r-oak-5", category: "market", severity: "low", likelihood: "unlikely", summary: "Oakland rental demand remains strong but rents may face downward pressure", mitigation: "Underwrite conservatively. Target below-market achievable rents.", verifiedBy: "Market analyst or appraiser" },
-      { id: "r-oak-6", category: "data_confidence", severity: "medium", likelihood: "likely", summary: "Property data is from fallback/demo sources and needs verification", mitigation: "Pull title report, confirm parcel/zoning with county, verify lot dimensions with survey.", verifiedBy: "Title company and surveyor" },
+      {
+        id: "r-oak-1",
+        category: "zoning",
+        severity: "medium",
+        likelihood: "possible",
+        summary: "RM-2 allows multifamily but design review may require modifications",
+        mitigation:
+          "Pre-application meeting with Oakland Planning. Review design guidelines early.",
+        verifiedBy: "Land use attorney or planning consultant",
+      },
+      {
+        id: "r-oak-2",
+        category: "permitting",
+        severity: "medium",
+        likelihood: "likely",
+        summary: "Oakland permit timelines are 6-12 months for multifamily",
+        mitigation:
+          "Submit complete application. Use permit expediter. Consider SB 35 streamlining if affordable.",
+        verifiedBy: "Permit expediter",
+      },
+      {
+        id: "r-oak-3",
+        category: "construction",
+        severity: "high",
+        likelihood: "possible",
+        summary: "1923 structure may have lead, asbestos, or foundation issues requiring abatement",
+        mitigation:
+          "Phase I environmental assessment before acquisition. Budget 15% contingency for hazmat.",
+        verifiedBy: "Environmental consultant",
+      },
+      {
+        id: "r-oak-4",
+        category: "financing",
+        severity: "medium",
+        likelihood: "possible",
+        summary:
+          "Construction lending rates elevated. LTV constraints may require additional equity.",
+        mitigation:
+          "Secure term sheet before close. Explore CDFIs or mission-aligned lenders for affordable scenarios.",
+        verifiedBy: "Construction lender",
+      },
+      {
+        id: "r-oak-5",
+        category: "market",
+        severity: "low",
+        likelihood: "unlikely",
+        summary: "Oakland rental demand remains strong but rents may face downward pressure",
+        mitigation: "Underwrite conservatively. Target below-market achievable rents.",
+        verifiedBy: "Market analyst or appraiser",
+      },
+      {
+        id: "r-oak-6",
+        category: "data_confidence",
+        severity: "medium",
+        likelihood: "likely",
+        summary: "Property data is from fallback/demo sources and needs verification",
+        mitigation:
+          "Pull title report, confirm parcel/zoning with county, verify lot dimensions with survey.",
+        verifiedBy: "Title company and surveyor",
+      },
     ],
     assumptions: {
       acquisitionPrice: 750000,
@@ -197,14 +258,16 @@ export const mockProperties: MockProperty[] = [
         id: "sj-s1",
         name: "Townhome Development",
         type: "conservative",
-        description: "Build 4-6 attached townhomes. Established product type for the area. Straightforward entitlements.",
+        description:
+          "Build 4-6 attached townhomes. Established product type for the area. Straightforward entitlements.",
         estimatedUnits: { min: 4, max: 6 },
         estimatedCost: { min: 2200000, max: 3200000 },
         estimatedValue: { min: 4000000, max: 5500000 },
         timeline: "18-24 months",
         riskLevel: "medium",
         confidence: "medium",
-        recommendation: "Strong market fit for San Jose. Townhomes sell well in this corridor. Manageable scale.",
+        recommendation:
+          "Strong market fit for San Jose. Townhomes sell well in this corridor. Manageable scale.",
         massingConfig: {
           mainBuilding: { width: 50, depth: 35, height: 30, color: "#7A6B5D" },
           additionalStructures: [
@@ -218,14 +281,16 @@ export const mockProperties: MockProperty[] = [
         id: "sj-s2",
         name: "Small Multifamily (8-12 units)",
         type: "max_yield",
-        description: "Maximize density under R-M zoning. Podium or wrap-style with structured parking.",
+        description:
+          "Maximize density under R-M zoning. Podium or wrap-style with structured parking.",
         estimatedUnits: { min: 8, max: 12 },
         estimatedCost: { min: 4500000, max: 6500000 },
         estimatedValue: { min: 7000000, max: 9500000 },
         timeline: "24-30 months",
         riskLevel: "high",
         confidence: "medium",
-        recommendation: "High yield but complex. Requires strong GC and capital stack. Verify parking ratios with city.",
+        recommendation:
+          "High yield but complex. Requires strong GC and capital stack. Verify parking ratios with city.",
         massingConfig: {
           mainBuilding: { width: 55, depth: 60, height: 45, color: "#5D5247" },
           additionalStructures: [
@@ -240,14 +305,16 @@ export const mockProperties: MockProperty[] = [
         id: "sj-s3",
         name: "Mixed-Use with Retail",
         type: "adaptive_reuse",
-        description: "Ground-floor retail/commercial with residential above. Leverage corner visibility.",
+        description:
+          "Ground-floor retail/commercial with residential above. Leverage corner visibility.",
         estimatedUnits: { min: 6, max: 10 },
         estimatedCost: { min: 3800000, max: 5500000 },
         estimatedValue: { min: 5500000, max: 8000000 },
         timeline: "24-36 months",
         riskLevel: "high",
         confidence: "low",
-        recommendation: "Interesting concept but retail risk is significant. Verify commercial demand with local brokers first.",
+        recommendation:
+          "Interesting concept but retail risk is significant. Verify commercial demand with local brokers first.",
         massingConfig: {
           mainBuilding: { width: 55, depth: 55, height: 50, color: "#4F5D4F" },
           additionalStructures: [
@@ -260,11 +327,51 @@ export const mockProperties: MockProperty[] = [
       },
     ],
     risks: [
-      { id: "r-sj-1", category: "zoning", severity: "low", likelihood: "unlikely", summary: "R-M zoning supports intended use. No variance needed for residential.", mitigation: "Confirm FAR and height limits with planning staff.", verifiedBy: "Planning department pre-app" },
-      { id: "r-sj-2", category: "environmental", severity: "high", likelihood: "possible", summary: "Vacant lot may have prior commercial use. Soil contamination possible.", mitigation: "Phase I ESA before closing. Budget for Phase II if flags found.", verifiedBy: "Environmental consultant" },
-      { id: "r-sj-3", category: "construction", severity: "medium", likelihood: "likely", summary: "San Jose labor market is tight. GC availability and pricing volatile.", mitigation: "Lock in GC early. Use fixed-price contracts where possible.", verifiedBy: "General contractor bids" },
-      { id: "r-sj-4", category: "market", severity: "medium", likelihood: "possible", summary: "South Bay condo/rental market depends on tech sector stability", mitigation: "Diversify unit types. Include some affordable units for stability.", verifiedBy: "Market study" },
-      { id: "r-sj-5", category: "data_confidence", severity: "medium", likelihood: "likely", summary: "Lot size and zoning from fallback data need verification", mitigation: "Order ALTA survey and title report", verifiedBy: "Surveyor and title company" },
+      {
+        id: "r-sj-1",
+        category: "zoning",
+        severity: "low",
+        likelihood: "unlikely",
+        summary: "R-M zoning supports intended use. No variance needed for residential.",
+        mitigation: "Confirm FAR and height limits with planning staff.",
+        verifiedBy: "Planning department pre-app",
+      },
+      {
+        id: "r-sj-2",
+        category: "environmental",
+        severity: "high",
+        likelihood: "possible",
+        summary: "Vacant lot may have prior commercial use. Soil contamination possible.",
+        mitigation: "Phase I ESA before closing. Budget for Phase II if flags found.",
+        verifiedBy: "Environmental consultant",
+      },
+      {
+        id: "r-sj-3",
+        category: "construction",
+        severity: "medium",
+        likelihood: "likely",
+        summary: "San Jose labor market is tight. GC availability and pricing volatile.",
+        mitigation: "Lock in GC early. Use fixed-price contracts where possible.",
+        verifiedBy: "General contractor bids",
+      },
+      {
+        id: "r-sj-4",
+        category: "market",
+        severity: "medium",
+        likelihood: "possible",
+        summary: "South Bay condo/rental market depends on tech sector stability",
+        mitigation: "Diversify unit types. Include some affordable units for stability.",
+        verifiedBy: "Market study",
+      },
+      {
+        id: "r-sj-5",
+        category: "data_confidence",
+        severity: "medium",
+        likelihood: "likely",
+        summary: "Lot size and zoning from fallback data need verification",
+        mitigation: "Order ALTA survey and title report",
+        verifiedBy: "Surveyor and title company",
+      },
     ],
     assumptions: {
       acquisitionPrice: 1500000,
@@ -333,14 +440,16 @@ export const mockProperties: MockProperty[] = [
         id: "sf-s1",
         name: "Office-to-Residential Conversion",
         type: "adaptive_reuse",
-        description: "Convert vacant office to 18-24 residential units under AB 1490 / local conversion incentives.",
+        description:
+          "Convert vacant office to 18-24 residential units under AB 1490 / local conversion incentives.",
         estimatedUnits: { min: 18, max: 24 },
         estimatedCost: { min: 5500000, max: 8000000 },
         estimatedValue: { min: 12000000, max: 16000000 },
         timeline: "18-24 months",
         riskLevel: "medium",
         confidence: "medium",
-        recommendation: "Strong fit for current market. SF actively incentivizing office-to-residential. Verify structural suitability and floor plate efficiency.",
+        recommendation:
+          "Strong fit for current market. SF actively incentivizing office-to-residential. Verify structural suitability and floor plate efficiency.",
         massingConfig: {
           mainBuilding: { width: 50, depth: 60, height: 55, color: "#6B5B4F" },
           parking: true,
@@ -352,14 +461,16 @@ export const mockProperties: MockProperty[] = [
         id: "sf-s2",
         name: "Mixed-Use Residential + Ground Retail",
         type: "max_yield",
-        description: "Full conversion with ground-floor retail/restaurant space. Maximize NCT-3 allowances.",
+        description:
+          "Full conversion with ground-floor retail/restaurant space. Maximize NCT-3 allowances.",
         estimatedUnits: { min: 20, max: 28 },
         estimatedCost: { min: 7000000, max: 10000000 },
         estimatedValue: { min: 15000000, max: 20000000 },
         timeline: "24-30 months",
         riskLevel: "high",
         confidence: "medium",
-        recommendation: "Maximum value extraction. Ground-floor retail adds complexity but also income diversification. Market Street location supports retail.",
+        recommendation:
+          "Maximum value extraction. Ground-floor retail adds complexity but also income diversification. Market Street location supports retail.",
         massingConfig: {
           mainBuilding: { width: 50, depth: 60, height: 60, color: "#4F4540" },
           additionalStructures: [
@@ -374,14 +485,16 @@ export const mockProperties: MockProperty[] = [
         id: "sf-s3",
         name: "Affordable Housing Conversion",
         type: "affordable_sustainable",
-        description: "100% affordable conversion utilizing AB 2011, density bonus, and tax credits. Partner with MOHCD.",
+        description:
+          "100% affordable conversion utilizing AB 2011, density bonus, and tax credits. Partner with MOHCD.",
         estimatedUnits: { min: 24, max: 30 },
         estimatedCost: { min: 6000000, max: 9000000 },
         estimatedValue: { min: 8000000, max: 12000000 },
         timeline: "24-36 months",
         riskLevel: "medium",
         confidence: "medium",
-        recommendation: "Lower direct margins but de-risked approvals, tax credits, and guaranteed tenant pipeline. Strong community goodwill. Requires LIHTC/tax credit expertise.",
+        recommendation:
+          "Lower direct margins but de-risked approvals, tax credits, and guaranteed tenant pipeline. Strong community goodwill. Requires LIHTC/tax credit expertise.",
         massingConfig: {
           mainBuilding: { width: 50, depth: 60, height: 60, color: "#4F6B4F" },
           additionalStructures: [
@@ -394,12 +507,65 @@ export const mockProperties: MockProperty[] = [
       },
     ],
     risks: [
-      { id: "r-sf-1", category: "construction", severity: "high", likelihood: "likely", summary: "Office-to-residential conversion requires significant MEP and structural work", mitigation: "Engage structural engineer early. Assess floor plate depth for residential viability. Budget $80-120/sf conversion premium.", verifiedBy: "Structural engineer + architect" },
-      { id: "r-sf-2", category: "permitting", severity: "medium", likelihood: "possible", summary: "SF Planning review timeline uncertain despite conversion incentives", mitigation: "Use AB 1490 ministerial pathway if eligible. Engage permit consultant.", verifiedBy: "Planning consultant" },
-      { id: "r-sf-3", category: "financing", severity: "high", likelihood: "likely", summary: "Large capital requirement ($5-10M+) requires institutional capital or syndication", mitigation: "Structure as JV or fund investment. Explore PACE financing for energy improvements.", verifiedBy: "Capital advisor" },
-      { id: "r-sf-4", category: "market", severity: "medium", likelihood: "possible", summary: "SF residential absorption rates recovering but not pre-pandemic levels", mitigation: "Phase delivery if possible. Pre-lease/pre-sell where market supports.", verifiedBy: "Market analyst" },
-      { id: "r-sf-5", category: "environmental", severity: "medium", likelihood: "possible", summary: "1962 building likely has asbestos and lead. Seismic concerns.", mitigation: "Phase I ESA + seismic assessment pre-closing. Budget soft-story retrofit if needed.", verifiedBy: "Environmental + structural consultants" },
-      { id: "r-sf-6", category: "community_political", severity: "low", likelihood: "unlikely", summary: "Community may oppose density or displacement concerns", mitigation: "Proactive community engagement. Include affordable units. Highlight office-to-housing benefits.", verifiedBy: "Community relations consultant" },
+      {
+        id: "r-sf-1",
+        category: "construction",
+        severity: "high",
+        likelihood: "likely",
+        summary: "Office-to-residential conversion requires significant MEP and structural work",
+        mitigation:
+          "Engage structural engineer early. Assess floor plate depth for residential viability. Budget $80-120/sf conversion premium.",
+        verifiedBy: "Structural engineer + architect",
+      },
+      {
+        id: "r-sf-2",
+        category: "permitting",
+        severity: "medium",
+        likelihood: "possible",
+        summary: "SF Planning review timeline uncertain despite conversion incentives",
+        mitigation: "Use AB 1490 ministerial pathway if eligible. Engage permit consultant.",
+        verifiedBy: "Planning consultant",
+      },
+      {
+        id: "r-sf-3",
+        category: "financing",
+        severity: "high",
+        likelihood: "likely",
+        summary:
+          "Large capital requirement ($5-10M+) requires institutional capital or syndication",
+        mitigation:
+          "Structure as JV or fund investment. Explore PACE financing for energy improvements.",
+        verifiedBy: "Capital advisor",
+      },
+      {
+        id: "r-sf-4",
+        category: "market",
+        severity: "medium",
+        likelihood: "possible",
+        summary: "SF residential absorption rates recovering but not pre-pandemic levels",
+        mitigation: "Phase delivery if possible. Pre-lease/pre-sell where market supports.",
+        verifiedBy: "Market analyst",
+      },
+      {
+        id: "r-sf-5",
+        category: "environmental",
+        severity: "medium",
+        likelihood: "possible",
+        summary: "1962 building likely has asbestos and lead. Seismic concerns.",
+        mitigation:
+          "Phase I ESA + seismic assessment pre-closing. Budget soft-story retrofit if needed.",
+        verifiedBy: "Environmental + structural consultants",
+      },
+      {
+        id: "r-sf-6",
+        category: "community_political",
+        severity: "low",
+        likelihood: "unlikely",
+        summary: "Community may oppose density or displacement concerns",
+        mitigation:
+          "Proactive community engagement. Include affordable units. Highlight office-to-housing benefits.",
+        verifiedBy: "Community relations consultant",
+      },
     ],
     assumptions: {
       acquisitionPrice: 4200000,

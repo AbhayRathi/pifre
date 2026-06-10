@@ -26,7 +26,10 @@ describe("PropertyRecord schema", () => {
   });
 
   it("throws on wrong field types", () => {
-    const result = propertyRecordSchema.safeParse({ ...validProperty, lotSizeSqFt: "not a number" });
+    const result = propertyRecordSchema.safeParse({
+      ...validProperty,
+      lotSizeSqFt: "not a number",
+    });
     expect(result.success).toBe(false);
   });
 

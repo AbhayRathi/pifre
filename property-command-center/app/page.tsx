@@ -15,13 +15,9 @@ export default function DashboardPage() {
   }));
 
   const totalScenarios = properties.reduce((sum, p) => sum + p.scenarios.length, 0);
-  const totalSources = properties.reduce(
-    (sum, p) => sum + p.property.sourceRecords.length,
-    0
-  );
+  const totalSources = properties.reduce((sum, p) => sum + p.property.sourceRecords.length, 0);
   const realSources = properties.reduce(
-    (sum, p) =>
-      sum + p.property.sourceRecords.filter((s) => s.confidence === "high").length,
+    (sum, p) => sum + p.property.sourceRecords.filter((s) => s.confidence === "high").length,
     0
   );
   const confidenceLabel =
@@ -128,4 +124,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

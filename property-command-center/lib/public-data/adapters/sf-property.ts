@@ -3,15 +3,15 @@ import { SourceRecord } from "../../schemas/source";
 
 /**
  * San Francisco Property Data Adapter
- * 
+ *
  * Attempts to fetch real data from SF OpenData (DataSF) APIs.
  * Uses the Socrata Open Data API (SODA) endpoints.
- * 
+ *
  * Real endpoints:
  * - Assessor Historical Secured Property Tax Rolls: https://data.sfgov.org/resource/wv5m-vpq2.json
  * - Planning Department Permits: https://data.sfgov.org/resource/i98e-djp9.json
  * - Zoning Districts: https://data.sfgov.org/resource/xvjh-ra6g.json
- * 
+ *
  * TODO: Refine endpoint selection based on specific address parsing
  * TODO: Add parcel geometry lookup
  * TODO: Add permit history integration
@@ -20,7 +20,7 @@ export const sfPropertyAdapter: DataAdapter = {
   name: "San Francisco OpenData (DataSF)",
   supportedCities: ["San Francisco", "SF"],
 
-  async fetch(address: string, city: string): Promise<AdapterResult> {
+  async fetch(address: string, _city: string): Promise<AdapterResult> {
     const sources: SourceRecord[] = [];
 
     try {
@@ -45,7 +45,8 @@ export const sfPropertyAdapter: DataAdapter = {
           url: "https://data.sfgov.org/Housing-and-Buildings/Assessor-Historical-Secured-Property-Tax-Rolls/wv5m-vpq2",
           retrievedAt: new Date().toISOString(),
           confidence: data.length > 0 ? "high" : "low",
-          notes: data.length > 0 ? "Real data retrieved from SF OpenData" : "No matching records found",
+          notes:
+            data.length > 0 ? "Real data retrieved from SF OpenData" : "No matching records found",
         });
 
         if (data.length > 0) {
@@ -60,7 +61,9 @@ export const sfPropertyAdapter: DataAdapter = {
               lotSizeSqFt: record.lot_area ? Number(record.lot_area) : undefined,
               buildingSizeSqFt: record.building_area ? Number(record.building_area) : undefined,
               currentUse: record.property_class_code_definition || undefined,
-              yearBuilt: record.year_property_built ? Number(record.year_property_built) : undefined,
+              yearBuilt: record.year_property_built
+                ? Number(record.year_property_built)
+                : undefined,
             },
             sources,
           };
@@ -76,7 +79,8 @@ export const sfPropertyAdapter: DataAdapter = {
         url: "https://data.sfgov.org/Housing-and-Buildings/Assessor-Historical-Secured-Property-Tax-Rolls/wv5m-vpq2",
         retrievedAt: new Date().toISOString(),
         confidence: "low",
-        notes: "Query returned no results. Address may need reformatting or may not exist in dataset.",
+        notes:
+          "Query returned no results. Address may need reformatting or may not exist in dataset.",
       });
 
       return { success: false, sources };

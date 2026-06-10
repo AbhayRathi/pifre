@@ -19,7 +19,10 @@ export type Database = {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database["public"]["Tables"]["properties"]["Row"], "created_at" | "updated_at">;
+        Insert: Omit<
+          Database["public"]["Tables"]["properties"]["Row"],
+          "created_at" | "updated_at"
+        >;
       };
       scenarios: {
         Row: {

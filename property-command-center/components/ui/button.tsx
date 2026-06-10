@@ -14,8 +14,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper-500 disabled:pointer-events-none disabled:opacity-50",
           {
             "bg-copper-600 text-white hover:bg-copper-700 shadow-sm": variant === "default",
-            "bg-graphite-700 text-ivory-100 hover:bg-graphite-600 shadow-sm": variant === "secondary",
-            "border border-graphite-600 bg-transparent text-ivory-200 hover:bg-graphite-700": variant === "outline",
+            "bg-graphite-700 text-ivory-100 hover:bg-graphite-600 shadow-sm":
+              variant === "secondary",
+            "border border-graphite-600 bg-transparent text-ivory-200 hover:bg-graphite-700":
+              variant === "outline",
             "text-ivory-300 hover:text-ivory-100 hover:bg-graphite-700": variant === "ghost",
             "bg-red-600 text-white hover:bg-red-700": variant === "destructive",
           },
