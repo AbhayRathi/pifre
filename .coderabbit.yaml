@@ -1,0 +1,48 @@
+version: "2"
+
+language: "en-US"
+
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+
+  path_instructions:
+    - path: "property-command-center/app/**"
+      instructions: |
+        This is a Next.js 15 App Router application. Pages are React Server Components by default.
+        Only add "use client" when the component actually uses browser APIs, hooks (useState, useEffect, useRef),
+        or event handlers that require a client context. Flag any unnecessary "use client" directives.
+
+    - path: "property-command-center/lib/db/**"
+      instructions: |
+        All database access goes through the DAL in lib/db/. Functions must check isSupabaseConfigured()
+        before attempting any query. Never import mock or fixture data in this layer.
+        Never call Date.now() as a record ID — IDs must be deterministic for deduplication.
+
+    - path: "property-command-center/lib/public-data/**"
+      instructions: |
+        Public data adapters must use makeSourceId() from adapter-utils.ts — never Date.now() as an ID.
+        normalizeAdapterResults must deduplicate sources by ID and sort high confidence first.
+
+    - path: "property-command-center/app/api/**"
+      instructions: |
+        API routes must never return 501. If a feature is not yet implemented, return a labelled
+        placeholder response with isPlaceholder: true. All inputs must be validated with Zod.
+
+    - path: "**/*.test.ts"
+      instructions: |
+        Tests use Vitest. Do not use jest.* globals — use vi.* equivalents.
+        Use vi.stubEnv for environment variable isolation. Never hit real network endpoints in unit tests.
+
+  tools:
+    github-checks:
+      enabled: true
+    ast-grep:
+      enabled: true
+
+chat:
+  auto_reply: true
